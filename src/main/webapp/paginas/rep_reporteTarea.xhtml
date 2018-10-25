@@ -1,0 +1,144 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmReporteTarea">
+			<p:growl id="mensajes" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['reporte_tarea.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+
+			<div align="center">
+				<h:panelGrid width="90%">
+					<h:panelGrid columns="15">
+						<p:spacer width="10" />
+						<p:outputLabel for="txtFechaInicio" styleClass="miEstiloEtiqueta"
+							value="#{i18n['reporte_tarea.fechaInicio']}" />
+						<p:spacer width="10" />
+						<p:calendar id="txtFechaInicio"
+							value="#{cReporteTarea.fechaInicio}" mode="popup" required="true"
+							requiredMessage="Ingresar Fecha Inicio">
+							<p:ajax event="dateSelect" update="txtFechaFin" />
+						</p:calendar>
+						<p:spacer width="10" />
+						<p:outputLabel for="txtFechaFin" styleClass="miEstiloEtiqueta"
+							value="#{i18n['reporte_tarea.fechaFin']}" />
+						<p:spacer width="10" />
+						<p:calendar id="txtFechaFin" value="#{cReporteTarea.fechaFin}"
+							requiredMessage="Ingresar Fecha Fin" mode="popup"
+							mindate="#{cReporteTarea.fechaInicio}" required="true" />
+						<p:spacer width="10" />
+						<p:commandButton id="btnBuscar" icon="ui-icon-search"
+							actionListener="#{cReporteTarea.buscarTarea()}"
+							update=":frmReporteTarea">
+						</p:commandButton>
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+						<p:commandButton style="align:left;" value="Exportar Excel" ajax="false" actionListener="#{cReporteTarea.generarExcel()}">
+						</p:commandButton>
+					</h:panelGrid>
+					<br />
+					<center>
+						<br />
+						<p:dataTable id="tblReporteTarea" widgetVar="wgvReporteTarea"
+							value="#{cReporteTarea.listaMapTareaxFecha}" var="ReporteTarea"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+							paginator="true" rows="15" paginatorPosition="bottom"
+							emptyMessage="#{i18n['reporte_tarea.tablaVacia']}">
+							
+							<p:column headerText="#{i18n['reporte_tarea.tas']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{ReporteTarea.nombreTarea}"
+								filterStyle="width:200px;">
+								<h:outputText value="#{ReporteTarea.nombreTarea}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.tk']}">
+								<h:outputText value="#{ReporteTarea.tkSolicitud}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.crq']}">
+								<h:outputText value="#{ReporteTarea.crqTarea}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.codigoAp']}">
+								<h:outputText value="#{ReporteTarea.codAplicativo}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.dominio']}">
+								<h:outputText value="#{ReporteTarea.nombreDominio}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.descripcion']}">
+								<h:outputText value="#{ReporteTarea.descripcionTarea}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.wo']}">
+								<h:outputText value="#{ReporteTarea.woTarea}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.tipoRechazo']}">
+								<h:outputText value="#{ReporteTarea.nombreTipoTarea}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.etapa']}">
+								<h:outputText value="#{ReporteTarea.nombreEtapaTarea}" />
+							</p:column>
+
+							<p:column style="width:300px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.equipo']}">
+								<h:outputText value="#{ReporteTarea.nombreEquipoTarea}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['reporte_tarea.archivo']}"
+								style="width:100px; text-align: center;" exportable="false">
+								<p:commandButton id="btnDescargarCorreo"
+									disabled="#{ReporteTarea.nombreTipoTarea eq 'Tarea Rechazada'}"
+									icon="ui-icon-circle-arrow-s" ajax="false"
+									actionListener="#{cReporteTarea.iniciarDescargarCorreo(ReporteTarea.idTarea)}">
+									<p:fileDownload
+										value="#{cReporteTarea.boTarea.archivoTareaStreamed}" />
+								</p:commandButton>
+								<p:tooltip for="btnDescargarCorreo"
+									value="#{i18n['MFMF.opcionDescargar']}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_tarea.fecha']}">
+								<h:outputText value="#{ReporteTarea.fechaTarea}">
+									<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss"
+										timeZone="America/Lima" />
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+						<br/>
+						
+						
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

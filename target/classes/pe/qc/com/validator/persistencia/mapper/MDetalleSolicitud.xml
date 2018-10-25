@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MDetalleSolicitud"> <!-- interface java -->
+
+	<resultMap id="bDetalleSolicitud"
+		type="pe.qc.com.validator.persistencia.entity.BDetalleSolicitud">
+		<id column="id_detalle_sol" property="idDetalleSolicitud" />
+		<result column="sn_detalle_sol" property="snDetalleSolicitud" />
+		<result column="st_detalle_sol" property="stDetalleSolicitud" />
+		<result column="ss_detalle_sol" property="ssDetalleSolicitud" />
+		<result column="inc_detalle_sol" property="incDetalleSolicitud" />
+	</resultMap>
+
+</mapper>

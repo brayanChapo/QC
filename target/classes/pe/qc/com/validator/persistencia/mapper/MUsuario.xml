@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MUsuario"> <!-- interface java -->
+
+	<resultMap id="bUsuario" type="pe.qc.com.validator.persistencia.entity.BUsuario">
+		<id column="id_usuario" property="idUsuario" />
+		<result column="id_rol" property="idRol" />
+		<result column="id_area" property="idArea" />
+		<result column="nombre_usuario" property="nombreUsuario" />
+		<result column="apellido_usuario" property="apellidoUsuario" />
+		<result column="codigo_usuario" property="codigoUsuario" />
+		<result column="pass_usuario" property="passUsuario" />
+		<result column="estado_usuario" property="estadoUsuario" />
+	</resultMap>
+	
+	<resultMap id="mapUsuario" type="java.util.Map">
+		<id column="id_usuario" property="idUsuario" />
+		<result column="id_rol" property="idRol" />
+		<result column="nombre_rol" property="nombreRol" />
+		<result column="id_area" property="idArea" />
+		<result column="nombre_area" property="nombreArea" />
+		<result column="nombre_usuario" property="nombreUsuario" />
+		<result column="apellido_usuario" property="apellidoUsuario" />
+		<result column="codigo_usuario" property="codigoUsuario" />
+		<result column="pass_usuario" property="passUsuario" />		
+	</resultMap>
+	
+	<resultMap id="mapConsultaUsuario" type="java.util.Map">
+		<id column="id_usuario" property="idUsuario" />
+		<result column="id_rol" property="idRol" />
+		<result column="nombre_rol" property="nombreRol" />
+		<result column="id_area" property="idArea" />
+		<result column="nombre_area" property="nombreArea" />
+		<result column="nombre_usuario" property="nombreUsuario" />
+		<result column="apellido_usuario" property="apellidoUsuario" />
+		<result column="codigo_usuario" property="codigoUsuario" />
+		<result column="pass_usuario" property="passUsuario" />
+		<result column="estado_usuario" property="estadoUsuario" />		
+	</resultMap>
+
+</mapper>

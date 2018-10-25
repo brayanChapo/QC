@@ -1,0 +1,60 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmConsultarDominio">
+			<p:growl id="mensajeDominio" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['consultar_Dominio.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<div align="center">
+				<h:panelGrid width="70%">
+					<br />
+					
+					<br />
+					<br />
+
+					<center>
+						<br />
+						<p:dataTable id="tblDominio" widgetVar="wgvDominio"
+							value="#{cConsultarDominio.listarDominio}" var="Dominio"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="15"
+							paginatorPosition="bottom"
+							emptyMessage="#{i18n['consultar_Dominio.tablaDominioVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cConsultarDominio.listarDominio.indexOf(Dominio)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['consultar_Dominio.nombreDominio']}"
+								style="width:150px; text-align: center;"
+								filterBy="#{Dominio.nombreDominio}" filterStyle="width:250px;">
+								<h:outputText value="#{Dominio.nombreDominio}" />
+							</p:column>
+
+							<p:column style="width:300px;"
+								headerText="#{i18n['consultar_Dominio.descripcionDominio']}">
+								<h:outputText value="#{Dominio.descripcionDominio}" />
+							</p:column>
+
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<h:form>
+		<p:menubar>
+			<p:submenu label="#{i18n['VALIDATOR.menu.mantenimiento']}"
+				style="font-size:13px 'daxcompact-mediumregular';font-weight:bolder;">
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.mantenerAplicativo']}"
+					action="/paginas/min_mantenerAplicativo.jsf?faces-redirect=true"
+					actionListener="#{cMantenerAplicativo.inicializarObjetos()}" />
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.mantenerDominio']}"
+					action="/paginas/min_mantenerDominio.jsf?faces-redirect=true"
+					actionListener="#{cMantenerDominio.inicializarObjetos()}" />
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.mantenerUsuario']}"
+					action="/paginas/min_mantenerUsuario.jsf?faces-redirect=true"
+					actionListener="#{cMantenerUsuario.inicializarObjetos()}" />
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.mantenerVOB']}"
+					action="/paginas/min_mantenerVOB.jsf?faces-redirect=true"
+					actionListener="#{cMantenerVOB.inicializarObjetos()}" />
+
+			</p:submenu>
+
+			<p:submenu label="#{i18n['VALIDATOR.menu.consulta']}"
+				style="font-size:13px 'daxcompact-mediumregular';">
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.consultaAplicativo']}"
+					action="/paginas/cin_consultarAplicativo.jsf?faces-redirect=true"
+					actionListener="#{cConsultarAplicativo.inicializarObjetos()}" />
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.consultaDominio']}"
+					action="/paginas/cin_consultarDominio.jsf?faces-redirect=true"
+					actionListener="#{cConsultarDominio.inicializarObjetos()}" />
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.consultaServidores']}"
+					action="/paginas/cin_consultarCmdb.jsf?faces-redirect=true"
+					actionListener="#{cConsultarServidores.inicializarObjetos()}" />
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.consultaVob']}"
+					action="/paginas/cin_consultarVOB.jsf?faces-redirect=true"
+					actionListener="#{cConsultarVOB.inicializarObjetos()}" />
+					
+			</p:submenu>
+
+			<p:submenu label="#{i18n['VALIDATOR.menu.validacion']}"
+				style="font-size:13px 'daxcompact-mediumregular';">
+				
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.registroRutas']}"
+					action="/paginas/min_mantenerRutas.jsf?faces-redirect=true"
+					actionListener="#{cMantenerRutas.inicializarObjetos()}" />
+				
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.mantenerTk']}"
+					action="/paginas/min_mantenerTk.jsf?faces-redirect=true"
+					actionListener="#{cMantenerTk.inicializarObjetos()}" />
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.validarMIS']}"
+					action="/paginas/validar_MIS.jsf?faces-redirect=true"
+					actionListener="#{cValidarMIS.inicializarObjetos()}" />
+
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.revisionClearCase']}"
+					action="/paginas/validar_clearCase.jsf?faces-redirect=true"
+					actionListener="#{cValidarClearCase.inicializarObjetos()}" />
+				
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.TareaRecahzadas']}"
+					action="/paginas/reg_TareaRechazadas.jsf?faces-redirect=true"
+					actionListener="#{cTareaRechazada.inicializarObjetos()}" />
+
+			</p:submenu>
+
+			<p:submenu label="#{i18n['VALIDATOR.menu.revision']}"
+				style="font-size:13px 'daxcompact-mediumregular';">
+				
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.revisionSolicitud']}"
+					action="/paginas/revisar_Solicitud.jsf?faces-redirect=true"
+					actionListener="#{cRevisarSolicitud.inicializarObjetos()}" />
+				
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.revisionMIS']}"
+					action="/paginas/revisar_MIS.jsf?faces-redirect=true"
+					actionListener="#{cRevisarMIS.inicializarObjetos()}" />
+				
+				
+				
+			</p:submenu>
+
+			<p:submenu label="#{i18n['VALIDATOR.menu.reporte']}"
+				style="font-size:13px 'daxcompact-mediumregular';">
+				
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.reporteMIS']}"
+					action="/paginas/rep_reporteMIS.jsf?faces-redirect=true"
+					actionListener="#{cReporteMIS.inicializarObjetos()}" />
+					
+				<p:menuitem style="font:12px 'daxcompact-mediumregular';"
+					value="#{i18n['VALIDATOR.submenu.reporteTarea']}"
+					action="/paginas/rep_reporteTarea.jsf?faces-redirect=true"
+					actionListener="#{cReporteTarea.inicializarObjetos()}" />
+			</p:submenu>
+			
+
+		</p:menubar>
+		<div id="cerrar">
+			<a href="#{request.contextPath}/j_spring_security_logout">#{i18n['MFMF.autenticacion.cerrarSesion']}</a>
+		</div>
+	</h:form>
+</ui:composition>

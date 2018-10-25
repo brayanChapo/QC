@@ -1,0 +1,71 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmConsultarAplicativo">
+			<p:growl id="mensajeAplicativo" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['consultar_Aplicativo.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<div align="center">
+				<h:panelGrid width="80%">
+					<br />
+					
+					<br />
+					<br />
+
+					<center>
+						<p:dataTable id="tblConsultarAplicativo" widgetVar="wgvAplicativo"
+							value="#{cConsultarAplicativo.listaMapAplicativo}"
+							var="mapAplicativo"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="15" paginatorPosition="bottom"
+							emptyMessage="#{i18n['consultar_Aplicativo.tablaAplicativoVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cConsultarAplicativo.listaMapAplicativo.indexOf(mapAplicativo)+1}
+							</p:column>
+
+							<p:column
+								headerText="#{i18n['consultar_Aplicativo.nombreAplicativo']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{mapAplicativo.nombreAplicativo}"
+								filterStyle="width:200px;">
+								<h:outputText value="#{mapAplicativo.nombreAplicativo}" />
+							</p:column>
+
+							<p:column
+								headerText="#{i18n['consultar_Aplicativo.nombreDominio']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Aplicativo.nombreDominio}"
+								filterStyle="width:200px;">
+								<h:outputText value="#{mapAplicativo.nombreDominio}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['consultar_Aplicativo.nombreVob']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Aplicativo.nombreVob}" filterStyle="width:200px;">
+								<h:outputText value="#{mapAplicativo.nombreVob}" />
+							</p:column>
+
+
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

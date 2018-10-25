@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html" id="fview">
+
+	<title>Menu Principal</title>
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{request.contextPath}/recursos/img/plantillaBN/logo1.png" />
+	<ui:debug />
+	<f:metadata>
+		<ui:insert name="metadata" />
+	</f:metadata>
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+				
+		<link rel="stylesheet" type="text/css"
+			href="#{request.contextPath}/recursos/css/resetearcss.css" />
+		<link rel="stylesheet" type="text/css"
+			href="#{request.contextPath}/recursos/css/login-principal.css" />
+		<link rel="stylesheet" type="text/css"
+			href="#{request.contextPath}/recursos/css/tipografias.css" />
+		<link rel="stylesheet" type="text/css"
+			href="#{request.contextPath}/recursos/css/plantillaMenu.css" />
+		<link rel="stylesheet" type="text/css"
+			href="#{request.contextPath}/recursos/css/style.css" />
+		<!-- JAVASCRIPTS -->
+		<h:outputScript library="js" name="calendar_es.js" />
+		<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+		<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head" />
+	</h:head>
+	<h:body>
+
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+		<p:layout fullPage="true" resizeTitle="resize">
+
+			<p:layoutUnit position="north" size="118" id="north">
+				<ui:include src="/secciones/cabecera.xhtml" />
+				<ui:include src="/secciones/menu.xhtml" />
+			</p:layoutUnit>
+
+			<p:layoutUnit styleClass="layoutUnitCenter" position="center"
+				style="font-size:11px">
+				<p:scrollPanel mode="native" style="height: 100%">
+					<ui:insert name="content"/>
+				</p:scrollPanel>
+			</p:layoutUnit>
+
+			<p:layoutUnit position="south" size="25" id="south">
+				<ui:include src="/secciones/piePagina.xhtml" />
+			</p:layoutUnit>
+		</p:layout>
+
+		<p:dialog modal="true" widgetVar="statusDialog" showHeader="false"
+			draggable="false" closable="false" resizable="false" visible="false"
+			position="center" maximizable="false" minimizable="false">
+		</p:dialog>
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<center>
+				<p:outputLabel value="Cargando.." style="font-size:12px" />
+				<br />
+			</center>
+			<img src="#{request.contextPath}/recursos/img/ajaxloadingbar.gif" />
+		</p:dialog>
+	
+		<p:dialog header="Sessión Expirada"
+			widgetVar="SessionExpirada" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false" closable="false"
+			draggable="false">
+			<h:form id="frmSession">
+				<center>
+					<h:outputLabel value="Ud. debe retornar al inicio"/>
+					<br />
+					<br />
+					<input type="button" value="OK" onclick="location.href='/validator/iniciar_sesion.jsf?faces-redirect=true' "/>
+<!-- 					<p:button id="btn" value="OK" action="iniciar_sesion.jsf?faces-redirect=true"> -->
+						
+<!-- 					</p:button> -->
+<!-- 					<a class="button" href="/validator/iniciar_sesion.jsf?faces-redirect=true" >OK</a> -->
+				</center>
+			</h:form>
+			
+		</p:dialog>
+	</h:body>
+</f:view>
+</html>

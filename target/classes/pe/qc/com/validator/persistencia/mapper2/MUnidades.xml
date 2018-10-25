@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper2.MUnidades"> <!-- interface java -->
+
+	<resultMap id="bUnidades"
+		type="pe.qc.com.validator.persistencia.entity2.BUnidades">
+		<result column="unidad_disco" property="nombreUnidad" />
+		<result column="espacio_total_disco" property="capacidadTotal" />
+		<result column="espacion_disponible_disco" property="capacidadDisponible" />
+	</resultMap>
+
+</mapper>

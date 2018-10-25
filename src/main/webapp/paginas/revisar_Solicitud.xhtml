@@ -1,0 +1,485 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+		<h:form id="frmRevisarSolicitud">
+			<p:growl id="mensajes" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['revisar_solicutud.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<br />
+
+			<div align="center">
+				<h:panelGrid width="80%">
+					<br />
+					<div align="left">
+						<p:commandButton id="btnExportar"
+							value="Exportar Excel"
+							ajax="false"
+							actionListener="#{cRevisarSolicitud.generarExcel()}">
+						</p:commandButton>
+					</div>
+					<br />
+					<center>
+						<br />
+						<p:dataTable id="tblSolicitud" widgetVar="wgvSolicitud"
+							value="#{cRevisarSolicitud.listaMapsolicitud}" var="Solicitud"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							emptyMessage="#{i18n['revisar_solicutud.tablaSolicitudVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cRevisarSolicitud.listaMapsolicitud.indexOf(Solicitud)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['revisar_solicutud.nombreTK']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Solicitud.tkSolicitud}" filterStyle="width:200px;">
+								<h:outputText value="#{Solicitud.tkSolicitud}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['revisar_solicutud.CRQTK']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Solicitud.crqSolicitud}" filterStyle="width:200px;">
+								<h:outputText value="#{Solicitud.crqSolicitud}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['revisar_solicutud.criticidadTK']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Solicitud.criticidadSolicitud}" />
+							</p:column>
+
+							<p:column
+								headerText="#{i18n['revisar_solicutud.estadoSolicitud']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Solicitud.nombreEstadoSolicitud}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['revisar_solicutud.fechaTK']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Solicitud.fechaSolicitud}">
+									<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss" timeZone="America/Lima" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{i18n['revisar_solicutud.datos']}"
+								style="width:8%">
+								<div align="center">
+									<p:commandButton id="btnDatos" icon="ui-icon-search"
+										actionListener="#{cRevisarSolicitud.consultarDatos(Solicitud)}"
+										update=":frmConsultarSolicitud" />
+									<p:tooltip for="btnDatos"
+										value="#{i18n['revisar_solicutud.verDatos']}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="#{i18n['revisar_solicutud.atender']}"
+								style="width:8%">
+								<div align="center">
+									<p:commandButton id="btnAtender" icon="ui-icon-cart"
+										actionListener="#{cRevisarSolicitud.atenderSolicitud(Solicitud)}"
+										update=":frmAtenderSolicitud" />
+									<p:tooltip for="btnAtender"
+										value="#{i18n['revisar_solicutud.verAtender']}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="#{i18n['revisar_solicutud.historico']}"
+								style="width:8%">
+								<div align="center">
+									<p:commandButton id="btnHistorico" icon="ui-icon-note"
+										actionListener="#{cRevisarSolicitud.listarHistoricoSolicitud(Solicitud)}"
+										update=":frmHistoricoSolicitud" />
+									<p:tooltip for="btnHistorico"
+										value="#{i18n['revisar_solicutud.verHistorico']}" />
+								</div>
+							</p:column>
+
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+		<!--MODAL CONSULTAR SOLICITUD-->
+
+		<p:dialog
+			header="#{i18n['revisar_solicutud.dialogConsultar.cabecera']}"
+			widgetVar="wgvConsultarSolicitud" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false" width="40%"
+			draggable="false">
+			<h:form id="frmConsultarSolicitud">
+				<br />
+				<div align="center">
+					<h:panelGrid columns="8">
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.solNegocio']}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolNegocio}" />
+						<p:spacer width="10"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolNegocio}" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boDetalleSolicitud.snDetalleSolicitud}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolNegocio}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolNegocio}" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.solTecnico']}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolTecnico}" />
+						<p:spacer width="10"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolTecnico}" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boDetalleSolicitud.stDetalleSolicitud}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolTecnico}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolTecnico}" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.solServicio']}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolServicio}" />
+						<p:spacer width="10"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolServicio}" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boDetalleSolicitud.ssDetalleSolicitud}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolServicio}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolServicio}" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.incidencia']}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarIncidencia}" />
+						<p:spacer width="10"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarIncidencia}" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boDetalleSolicitud.incDetalleSolicitud}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarIncidencia}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarIncidencia}" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.tk']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boSolicitud.tkSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.tk']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boSolicitud.tkSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.crq']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boSolicitud.crqSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.criticidad']}" />
+						<p:spacer width="10" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boSolicitud.criticidadSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.plataforma']}" />
+						<p:spacer width="10" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boPlataforma.nombrePlataforma}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.tipoSolicitud']}" />
+						<p:spacer width="10" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boTipoSolicitud.nombreTipoSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.vob']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boVob.nombreVob}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.dominio']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boDominio.nombreDominio}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.aplicativo']}" />
+						<p:spacer width="10" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boAplicativo.nombreAplicativo}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.usuario']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boUsuario.nombreUsuario}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogConsultar.estado']}" />
+						<p:spacer width="10" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boEstadoSolicitud.nombreEstadoSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+					</h:panelGrid>
+					<br />
+				</div>
+			</h:form>
+		</p:dialog>
+
+
+		<!--MODAL ATENDER SOLICITUD-->
+
+		<p:dialog header="#{i18n['revisar_solicutud.dialogAtender.cabecera']}"
+			widgetVar="wgvAtenderSolicitud" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false" width="40%"
+			draggable="false">
+			<h:form id="frmAtenderSolicitud">
+				<br />
+				<div align="center">
+					<h:panelGrid columns="8">
+
+						<p:outputLabel for="txtEstadoSolicitud"
+							styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.estado']}" />
+						<p:spacer width="10" />
+						<p:selectOneMenu id="txtEstadoSolicitud"
+							style="margin-top: -20px; width: 168px"
+							value="#{cRevisarSolicitud.boSolicitud.idEstadoSolicitud}"
+							required="true"
+							requiredMessage="#{i18n['revisar_solicutud.dialogAtender.estadoNoValida']}">
+							<f:selectItem
+								itemLabel="#{i18n['revisar_solicutud.dialogAtender.seleccioneEstado']}"
+								itemValue="#{null}" />
+							<f:selectItems
+								value="#{cRevisarSolicitud.boSolicitud.listaEstadoSolicitud}" />
+						</p:selectOneMenu>
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.solNegocio']}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolNegocio}" />
+						<p:spacer width="10"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolNegocio}" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boDetalleSolicitud.snDetalleSolicitud}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolNegocio}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolNegocio}" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.solTecnico']}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolTecnico}" />
+						<p:spacer width="10"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolTecnico}" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boDetalleSolicitud.stDetalleSolicitud}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolTecnico}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolTecnico}" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.solServicio']}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolServicio}" />
+						<p:spacer width="10"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolServicio}" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boDetalleSolicitud.ssDetalleSolicitud}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolServicio}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarSolServicio}" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.incidencia']}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarIncidencia}" />
+						<p:spacer width="10"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarIncidencia}" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boDetalleSolicitud.incDetalleSolicitud}"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarIncidencia}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30"
+							rendered="#{cRevisarSolicitud.boSolicitud.mostrarIncidencia}" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.tk']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boSolicitud.tkSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.tk']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boSolicitud.tkSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.crq']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boSolicitud.crqSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.criticidad']}" />
+						<p:spacer width="10" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boSolicitud.criticidadSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.plataforma']}" />
+						<p:spacer width="10" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boPlataforma.nombrePlataforma}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.tipoSolicitud']}" />
+						<p:spacer width="10" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boTipoSolicitud.nombreTipoSolicitud}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.vob']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boVob.nombreVob}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.dominio']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boDominio.nombreDominio}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.aplicativo']}" />
+						<p:spacer width="10" />
+						<p:inputText
+							value="#{cRevisarSolicitud.boAplicativo.nombreAplicativo}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_solicutud.dialogAtender.usuario']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cRevisarSolicitud.boUsuario.nombreUsuario}"
+							size="30" maxlength="30" readonly="true" />
+						<p:spacer width="30" />
+
+					</h:panelGrid>
+				</div>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionAceptar']}"
+						actionListener="#{cRevisarSolicitud.congelamientoAtendido()}"
+						update=":frmRevisarSolicitud :frmAtenderSolicitud"
+						oncomplete="PF('wgvSolicitud').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvAtenderSolicitud').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+
+			</h:form>
+		</p:dialog>
+
+		<!--MODAL HISTORICO SOLICITUD-->
+
+		<p:dialog header="#{i18n['revisar_solicutud.dialogConsultarHistorico.cabecera']}"
+			widgetVar="wgvHistoricoSolicitud" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false" width="40%"
+			draggable="false">
+			<h:form id="frmHistoricoSolicitud">
+				
+				<div align="center">
+					<h:panelGrid width="90%">
+						<br />
+						<center>
+							<br />
+							<p:dataTable id="tblHistoricoSolicitud" widgetVar="wgvHistoricoSolicitud1"
+								value="#{cRevisarSolicitud.listaMapsolicitudHistorica}" var="SolicitudHistorico"
+								currentPageReportTemplate="{currentPage} de {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 	{NextPageLink} {LastPageLink}"
+								paginator="true" rows="5" paginatorPosition="bottom"
+								emptyMessage="#{i18n['revisar_solicutud.dialogConsultarHistorico.tablaVacia']}">
+
+								<p:column headerText="N°" style="width:50px; text-align: center;">
+									#{cRevisarSolicitud.listaMapsolicitudHistorica.indexOf(SolicitudHistorico)+1}
+								</p:column>
+
+								<p:column headerText="#{i18n['revisar_solicutud.dialogConsultarHistorico.nombreRevisor']}"
+									style="width:200px; text-align: center;">
+									<h:outputText value="#{SolicitudHistorico.nombreRevisor}" />
+								</p:column>
+								
+								<p:column headerText="#{i18n['revisar_solicutud.dialogConsultarHistorico.estado']}"
+									style="width:200px; text-align: center;">
+									<h:outputText value="#{SolicitudHistorico.nombreEstadoSolicitud}" />
+								</p:column>
+								
+								<p:column headerText="#{i18n['revisar_solicutud.dialogConsultarHistorico.fechaModificacion']}"
+									style="width:200px; text-align: center;">
+									<h:outputText value="#{SolicitudHistorico.fechaSolicitud}">
+										<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss" />
+									</h:outputText>
+								</p:column>
+
+							</p:dataTable>
+						</center>
+					</h:panelGrid>
+				</div>
+				<br />
+				<br />
+			</h:form>
+		</p:dialog>
+
+
+	</ui:define>
+</ui:composition>

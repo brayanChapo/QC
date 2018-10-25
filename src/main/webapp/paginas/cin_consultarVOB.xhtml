@@ -1,0 +1,55 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmConsultarVOB">
+			<p:growl id="mensajeVOB" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['consultar_Vob.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<div align="center">
+				<h:panelGrid width="60%">
+					<br />
+					<br />
+					<br />
+
+					<center>
+						<br />
+						<p:dataTable id="tblVOB" widgetVar="wgvVOB"
+							value="#{cConsultarVOB.listarVob}" var="Vob"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="15"
+							paginatorPosition="bottom"
+							emptyMessage="#{i18n['consultar_Vob.tablaVobVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cConsultarVOB.listarVob.indexOf(Vob)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['consultar_Vob.nombreVOB']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Vob.nombreVob}" filterStyle="width:400px;">
+								<h:outputText value="#{Vob.nombreVob}" />
+							</p:column>
+
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+	
+	</ui:define>
+</ui:composition>

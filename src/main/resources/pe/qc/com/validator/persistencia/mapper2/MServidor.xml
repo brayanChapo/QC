@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper2.MServidor"> <!-- interface java -->
+
+	<resultMap id="bServidor"
+		type="pe.qc.com.validator.persistencia.entity2.BServidor">
+		<result column="hostname_servidor" property="hostnameServidor" />
+		<result column="categoria_servidor" property="categoriaServidor" />
+		<result column="memoria_fisica" property="memoriaFisica" />
+		<result column="descripcion_servidor" property="descripcionServidor" />
+		<result column="fabricante_servidor" property="fabricanteServidor" />
+		<result column="estado_plataforma" property="estadoPlataforma" />
+		<result column="estado_activacion" property="estadoCmdb" />
+	</resultMap>
+
+</mapper>

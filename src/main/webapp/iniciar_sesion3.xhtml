@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>QCVALIDATOR</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta http-equiv="Content-Language" content="es" />
+	<meta name="robots" content="index,follow" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta http-equiv="expires" content="0" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{request.contextPath}/recursos/img/favicon.ico" />
+
+	<link rel="stylesheet" type="text/css"
+		href="recursos/css/resetearcss.css" />
+	<link rel="stylesheet" type="text/css"
+		href="recursos/css/login-principal.css" />
+	<link rel="stylesheet" type="text/css" href="recursos/css/login.css" />
+	<link rel="stylesheet" type="text/css"
+		href="recursos/css/tipografias.css" />
+</h:head>
+<h:body>
+	<div id="bn-contenidos" style="width: 1123px; height: 650px;">
+		<div id="cabecera" style="width: 1144px; height: 120px;">
+			<img src="recursos/img/plantillaBN/logo1.png" alt="Logo Everis" style="height: 91px; width: 168px" /><a href="" accesskey="l" title="Logo Everis"></a>
+		</div>
+		<div id="border-superior">
+			
+		<img src="recursos/img/plantillaBN/body.jpg" style="height: 12px; width: 1126px" /></div>
+		<div id="cuerpo" style="width: 1123px; height: 550px;">
+			<div id="logo">
+				<img src="recursos/img/plantillaBN/Logo2.png" style="height: 100px; width: 250px; margin-top: -80px"/>
+			</div>
+<!-- 			<div class="visa"> -->
+
+<!-- 				<div class="contenedor-slide" style="width: 456px; height: 408px ; margin-top: -65px"> -->
+
+<!-- 					<img src="recursos/img/plantillaBN/everis-imagen.jpg" style="width: 455px; height: 407px"/> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+			<p:outputLabel value="#{cLogin.estaLogeado()}" style="display:none"></p:outputLabel>
+			<div id="limp" class="limpiar" style="height: 580px; margin-left: 150px ">
+				<h:form id="loginForm" prependId="false">
+					<h2>Acceso al Sistema</h2>
+
+					<div class="etiquetas-form">
+						<p:messages id="messages" showDetail="false" closable="true" showSummary="true" />
+						<!--  <div class="titulo-form">Ingresa aqu&iacute;</div>-->
+						<div class="limpiar">
+							<h:outputLabel for="j_username" value="Usuario:"
+								styleClass="grande" />
+							<p:inputText id="j_username" value="#{cLogin.fLogin.usuario}"
+								required="true" label="username" styleClass="grande"
+								maxlength="6" requiredMessage="Ingrese un usuario"
+								validatorMessage="El dato ingresado para el 'Usuario' no es correcto, ingrese solo números y letras">
+								<f:validateRegex
+									pattern="(([0-9]|[A-Z]|[a-z]|á|é|í|ó|ú|ñ|Ñ|Á|É|Í|Ó|Ú)*)" />
+							</p:inputText>
+						</div>
+						<div class="limpiar">
+							<h:outputLabel for="j_password" value="Contrase&ntilde;a:" />
+							<p:password id="j_password" value="#{cLogin.fLogin.clave}"
+								requiredMessage="Ingrese una contrase&ntilde;a" maxlength="10"
+								required="true" label="password" styleClass="grande" />
+						</div>
+	 
+						<br />
+						<p:commandButton id="btnLogin" value="Ingresar"
+							validateClient="true" styleClass="commandButton"
+							update="loginForm" actionListener="#{cLogin.iniciarSesion}" />
+
+					</div>
+					<div id="contacto" class="generar-clave-chica">
+						<img src="recursos/img/plantillaBN/chica.png" />
+						<div class="generar-clave-contenido">
+							<p>
+								Si no recuerda su contrase&ntilde;a, comuniquese al anexo: <span>169-173</span>
+							</p>
+							<p>
+								o env&iacute;e un correo a <span>qc.everis.peru@everis.com</span>
+							</p>
+
+						</div>
+					</div>
+				</h:form>
+			</div>
+		</div>
+
+		<div id="border-inferior">
+			<img src="recursos/img/plantillaBN/body.jpg" style="height: 12px; width: 980px"/>
+		</div>
+	</div>
+
+
+	<div id="pie-pagina">Everis- Peru SAC &copy;, Lima -
+				Per&uacute; 2018, Todos los derechos reservados</div>
+
+
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		oncomplete="PF('statusDialog').hide()" />
+
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false">
+		<center>
+			<p:outputLabel value="Cargando.." style="font-size:12px" />
+			<br />
+		</center>
+		<!-- 		<img src="/recursos/img/ajaxloadingbar.gif" /> -->
+		<!-- 			<p:graphicImage name="recursos/img/ajaxloadingbar.gif" /> -->
+	</p:dialog>
+</h:body>
+
+</html>

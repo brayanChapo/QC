@@ -1,0 +1,7 @@
+
+.salir{
+	background-image: url("#{facesContext.externalContext.request.contextPath}/resources/img/iconos/salir.png") !important;
+}
+
+
+

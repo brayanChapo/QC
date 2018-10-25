@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MTarea"> <!-- interface java -->
+
+	<resultMap id="bTarea"
+		type="pe.qc.com.validator.persistencia.entity.BTarea">
+		<id column="id_Tarea" property="idTarea" />
+		<result column="id_Equipo_Tarea" property="idEquipoTarea" />
+		<result column="id_Tipo_Tarea_Tarea" property="idTipoTarea" />
+		<result column="id_Etapa_Tarea" property="idEtapaTarea" />
+		<result column="id_Solicitud_Tarea" property="idSolicitudTarea" />
+		<result column="nombre_Tarea" property="nombreTarea" />
+		<result column="crq_Tarea" property="crqTarea" />
+		<result column="descripcion_Tarea" property="descripcionTarea" />
+		<result column="ARCHIVO_TAREA" property="archivoTarea" />
+		<result column="nombre_Archivo_Tarea" property="nombreArchivo" />
+		<result column="fecha_Tarea" property="fechaTarea" />
+		<result column="id_Usuario_Tarea" property="idUsuarioTarea" />
+		<result column="wo_Tarea" property="woTarea" />
+	</resultMap>
+	
+	<resultMap id="mapTarea" type="java.util.Map">
+		<id column="id_Tarea" property="idTarea" />
+		<result column="nombre_Tarea" property="nombreTarea" />
+		<result column="crq_Tarea" property="crqTarea" />
+		<result column="descripcion_Tarea" property="descripcionTarea" />
+		<result column="archivo_Tarea" property="archivoTarea" />
+		<result column="nombre_Archivo_Tarea" property="nombreArchivo" />
+		<result column="fecha_Tarea" property="fechaTarea" />
+		<result column="id_Usuario_Tarea" property="idUsuarioTarea" />
+		<result column="id_Equipo_Tarea" property="idEquipoTarea" />
+		<result column="nombre_equipo" property="nombreEquipoTarea" />
+		<result column="id_Tipo_Tarea_Tarea" property="idTipoTarea" />
+		<result column="nombre_tipo_tarea" property="nombreTipoTarea" />
+		<result column="id_Etapa_Tarea" property="idEtapaTarea" />
+		<result column="nombre_etapa" property="nombreEtapaTarea" />
+		<result column="id_Solicitud_Tarea" property="idSolicitudTarea" />
+		<result column="wo_Tarea" property="woTarea" />		
+	</resultMap>
+	
+	<resultMap id="mapTareaReporte" type="java.util.Map">
+		<id column="id_Tarea" property="idTarea" />
+		<result column="nombre_Tarea" property="nombreTarea" />
+		<result column="crq_Tarea" property="crqTarea" />
+		<result column="descripcion_Tarea" property="descripcionTarea" />
+		<result column="archivo_Tarea" property="archivoTarea" />
+		<result column="nombre_Archivo_Tarea" property="nombreArchivo" />
+		<result column="fecha_Tarea" property="fechaTarea" />
+		<result column="wo_Tarea" property="woTarea" />
+		<result column="nombre_equipo" property="nombreEquipoTarea" />
+		<result column="nombre_etapa" property="nombreEtapaTarea" />
+		<result column="nombre_tipo_tarea" property="nombreTipoTarea" />
+		<result column="tk_solicitud" property="tkSolicitud" />
+		<result column="nombre_codigo_ap" property="codAplicativo" />
+		<result column="nombre_dominio" property="nombreDominio" />
+	</resultMap>
+
+</mapper>

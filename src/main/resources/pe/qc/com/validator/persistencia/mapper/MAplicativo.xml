@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MAplicativo"> <!-- interface java -->
+
+	<resultMap id="bAplicativo" type="pe.qc.com.validator.persistencia.entity.BAplicativo">
+		<id column="id_codigo_ap" property="idAplicativo" />
+		<result column="id_dominio" property="idDominio" />
+		<result column="id_vob" property="idVob" />
+		<result column="nombre_codigo_ap" property="nombreAplicativo" />
+	</resultMap>
+	
+	<resultMap id="mapAplicativo" type="java.util.Map">
+		<id column="id_codigo_ap" property="idAplicativo" />
+		<result column="id_vob" property="idVob" />
+		<result column="id_dominio" property="idDominio" />
+		<result column="nombre_vob" property="nombreVob" />
+		<result column="nombre_dominio" property="nombreDominio" />
+		<result column="nombre_codigo_ap" property="nombreAplicativo" />
+		<result column="descripcion_codigo_ap" property="descripcionAplicativo" />			
+	</resultMap>
+
+</mapper>

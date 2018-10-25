@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper2.MSOServidor"> <!-- interface java -->
+
+	<resultMap id="bSOServidor"
+		type="pe.qc.com.validator.persistencia.entity2.BSOServidor">
+		<result column="fabricante_so" property="fabricante" />
+		<result column="tipo_so" property="tipoSO" />
+		<result column="nombre_detallado" property="nombreDetallado" />
+		<result column="estado_so" property="estado" />
+	</resultMap>
+
+</mapper>

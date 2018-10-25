@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MEquipo"> <!-- interface java -->
+
+	<resultMap id="bEquipo"
+		type="pe.qc.com.validator.persistencia.entity.BEquipo">
+		<id column="id_Equipo" property="idEquipo" />
+		<result column="nombre_Equipo" property="nombreEquipo" />
+	</resultMap>
+
+</mapper>

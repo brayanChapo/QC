@@ -1,0 +1,194 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmMantenerDominio">
+			<p:growl id="mensajeDominio" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['mantener_Dominio.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<div align="center">
+				<h:panelGrid width="70%">
+					<br />
+					<p:commandButton id="btnAgregarDominio"
+						value="#{i18n['VALIDATOR.opcionAgregar']}"
+						actionListener="#{cMantenerDominio.iniciarAgregarDominio()}"
+						update=":frmAgregarDominio">
+						<p:resetInput target=" :frmAgregarDominio" />
+					</p:commandButton>
+					<br />
+					<br />
+
+					<center>
+						<br />
+						<p:dataTable id="tblDominio" widgetVar="wgvDominio"
+							value="#{cMantenerDominio.listarDominio}" var="Dominio"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="10"
+							paginatorPosition="bottom"
+							emptyMessage="#{i18n['mantener_Dominio.tablaDominioVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cMantenerDominio.listarDominio.indexOf(Dominio)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_Dominio.nombreDominio']}"
+								style="width:150px; text-align: center;"
+								filterBy="#{Dominio.nombreDominio}" filterStyle="width:250px;">
+								<h:outputText value="#{Dominio.nombreDominio}" />
+							</p:column>
+
+							<p:column style="width:300px;"
+								headerText="#{i18n['mantener_Dominio.descripcionDominio']}">
+								<h:outputText value="#{Dominio.descripcionDominio}" />
+							</p:column>
+
+							<p:column
+								headerText="#{i18n['mantener_Dominio.opcionesDominio']}"
+								style="width:150px; text-align: center;">
+								<div align="center">
+									<p:commandButton id="btnModificarDominio" icon="ui-icon-pencil"
+										disabled="#{cMantenerDominio.obtenerinfo(Dominio)}"
+										actionListener="#{cMantenerDominio.iniciarModificarDominio(Dominio)}"
+										update=":frmModificarDominio">
+									</p:commandButton>
+									<p:tooltip for="btnModificarDominio"
+										value="#{i18n['VALIDATOR.opcionModificar']}" />
+									<p:commandButton id="btnEliminarDominio" icon="ui-icon-trash"
+										oncomplete="PF('wgvDominio').clearFilters()"
+										disabled="#{cMantenerDominio.obtenerinfo(Dominio)}"
+										actionListener="#{cMantenerDominio.setBoDominio(Dominio)}"
+										onclick="PF('wgvEliminarDominio').show()"
+										update=":frmEliminarDominio">
+
+									</p:commandButton>
+									<p:tooltip for="btnEliminarDominio"
+										value="#{i18n['VALIDATOR.opcionEliminar']}" />
+								</div>
+							</p:column>
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+		<!--MODAL AGREGAR Dominio-->
+
+		<p:dialog header="#{i18n['mantener_Dominio.dialogAgregar.cabecera']}"
+			widgetVar="wgvAgregarDominio" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmAgregarDominio">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="txtDominio" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Dominio.dialogAgregar.nombre']}" />
+					<p:spacer width="10" />
+					<p:inputText id="txtDominio" required="true"
+						value="#{cMantenerDominio.boDominio.nombreDominio}"
+						requiredMessage="#{i18n['mantener_Dominio.dialogAgregar.nombreRequerido']}"
+						size="52" maxlength="30" />
+					<p:spacer width="10" />
+					<p:spacer width="10" />
+					<p:spacer width="10" />
+					<h:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Dominio.dialogAgregar.descripcion']}" />
+					<p:spacer width="10" />
+					<p:inputTextarea
+						value="#{cMantenerDominio.boDominio.descripcionDominio}"
+						validatorMessage="#{i18n['mantener_Dominio.dialogAgregarDescripcionNoValida']}"
+						autoResize="false" maxlength="200" rows="5" cols="50" />
+				</h:panelGrid>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerDominio.agregarDominio()}"
+						update=":frmMantenerDominio :frmAgregarDominio"
+						oncomplete="PF('wgvDominio').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvAgregarDominio').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+
+		<!--MODAL MODIFICAR Dominio-->
+		<p:dialog
+			header="#{i18n['mantener_Dominio.dialogModificar.cabecera']}"
+			widgetVar="wgvModificarDominio" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmModificarDominio">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="txtDominio" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Dominio.dialogModificar.nombre']}" />
+					<p:spacer width="10" />
+					<p:inputText id="txtDominio" required="true"
+						value="#{cMantenerDominio.boDominio.nombreDominio}"
+						requiredMessage="#{i18n['mantener_Dominio.dialogAgregar.nombreRequerido']}"
+						size="52" maxlength="30" />
+					<p:spacer width="10" />
+					<p:spacer width="10" />
+					<p:spacer width="10" />
+					<h:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Dominio.dialogAgregar.descripcion']}" />
+					<p:spacer width="10" />
+					<p:inputTextarea
+						value="#{cMantenerDominio.boDominio.descripcionDominio}"
+						validatorMessage="#{i18n['mantener_Dominio.dialogAgregarDescripcionNoValida']}"
+						autoResize="false" maxlength="200" rows="5" cols="50" />
+				</h:panelGrid>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerDominio.modificarDominio()}"
+						update=":frmMantenerDominio :frmModificarDominio"
+						oncomplete="PF('wgvDominio').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						update=":frmMantenerDominio"
+						onclick="PF('wgvModificarDominio').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+
+		<!-- MODAL DE CONFIRMACION DE ELIMINACION -->
+		<p:confirmDialog
+			header="#{i18n['mantener_Dominio.dialogEliminar.cabecera']}"
+			message="#{i18n['mantener_Dominio.dialogEliminar.mensajeConfirmacion']}"
+			showEffect="fade" hideEffect="fade" widgetVar="wgvEliminarDominio"
+			appendTo="@(body)">
+			<h:form id="frmEliminarDominio">
+				<center>
+					<p:commandButton value="#{i18n['MFMF.opcionSi']}"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+						actionListener="#{cMantenerDominio.eliminarDominio()}"
+						update=":frmMantenerDominio"
+						oncomplete="PF('wgvDominio').clearFilters()" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionNo']}"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+						onclick="PF('wgvEliminarDominio').hide()" />
+				</center>
+			</h:form>
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,655 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmMantenerTk">
+			<p:growl id="mensajeTk" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['mantener_Tk.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<div align="center">
+				<h:panelGrid width="80%">
+					<br />
+					<p:commandButton id="btnAgregarTk"
+						value="#{i18n['VALIDATOR.opcionAgregar']}"
+						actionListener="#{cMantenerTk.iniciarAgregarTk()}"
+						update=":frmAgregarTk">
+						<p:resetInput target=" :frmAgregarTk" />
+					</p:commandButton>
+					<br />
+					<br />
+
+					<center>
+						<br />
+						<p:dataTable id="tblSolicitud" widgetVar="wgvSolicitud"
+							value="#{cMantenerTk.listaSolicitud}" var="Solicitud"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="5" paginatorPosition="bottom"
+							emptyMessage="#{i18n['mantener_Tk.tablaAplicativoVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cMantenerTk.listaSolicitud.indexOf(Solicitud)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_Tk.nombreTK']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Solicitud.tkSolicitud}" filterStyle="width:200px;">
+								<h:outputText value="#{Solicitud.tkSolicitud}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_Tk.CRQTK']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Solicitud.crqSolicitud}" filterStyle="width:200px;">
+								<h:outputText value="#{Solicitud.crqSolicitud}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_Tk.criticidadTK']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Solicitud.criticidadSolicitud}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['mantener_Tk.estadoTk']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{ Solicitud.idEstadoSolicitud eq 1 ? 'REGISTRADO' : Solicitud.idEstadoSolicitud eq 2 ? 'EN REVISION' : Solicitud.idEstadoSolicitud eq 3 ? 'OBSERVADO' : Solicitud.idEstadoSolicitud eq 4 ? 'CANCELADO' : Solicitud.idEstadoSolicitud eq 5 ? 'EXONERADO' : 'CREADO'}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_Tk.fechaTK']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Solicitud.fechaSolicitud}">
+									<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss" timeZone="America/Lima"/>
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_Tk.opcionesAplicativo']}"
+								style="width:150px; text-align: center;">
+								<div align="center">
+									<p:commandButton id="btnModificarSolicitud"
+										disabled="#{(Solicitud.idEstadoSolicitud eq 1) or (Solicitud.idEstadoSolicitud eq 2) or (Solicitud.idEstadoSolicitud eq 3) or (Solicitud.idEstadoSolicitud eq 4) or (Solicitud.idEstadoSolicitud eq 5)}"
+										icon="ui-icon-pencil"
+										actionListener="#{cMantenerTk.iniciarModificarTk(Solicitud)}"
+										update=":frmModificarTk">
+									</p:commandButton>
+									<p:tooltip for="btnModificarSolicitud"
+										value="#{i18n['VALIDATOR.opcionModificar']}" />
+									<p:commandButton id="btnConsultarDetalle" icon="ui-icon-search"
+										actionListener="#{cMantenerTk.consultarTK(Solicitud)}"
+										update=":frmConsultarTk">
+									</p:commandButton>
+									<p:tooltip for="btnConsultarDetalle"
+										value="#{i18n['VALIDATOR.opcionConsultar']}" />
+								</div>
+							</p:column>
+							
+							<p:column headerText="#{i18n['mantener_Tk.opcionesEstado']}"
+								style="width:150px; text-align: center;">
+								<div align="center">
+									<p:commandButton id="btnCambiarEstado"
+										disabled="#{(Solicitud.idEstadoSolicitud eq 1) or (Solicitud.idEstadoSolicitud eq 2) or (Solicitud.idEstadoSolicitud eq 3) or (Solicitud.idEstadoSolicitud eq 4) or (Solicitud.idEstadoSolicitud eq 5)}"
+										icon="ui-icon-pencil"
+										actionListener="#{cMantenerTk.modificarEstado(Solicitud)}"
+										update=":frmMantenerTk">
+									</p:commandButton>
+									<p:tooltip for="btnCambiarEstado"
+										value="#{i18n['VALIDATOR.cambiarEstado']}" />
+								</div>
+							</p:column>
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+		<!--MODAL AGREGAR Tk-->
+
+		<p:dialog header="#{i18n['mantener_Tk.dialogAgregar.cabecera']}"
+			widgetVar="wgvAgregarTk" appendTo="@(body)" modal="true" height="500"
+			showEffect="fade" hideEffect="fade" resizable="false" 
+			draggable="false">
+			<h:form id="frmAgregarTk">
+				<br />
+				<div align="center">
+					<h:panelGrid columns="7">
+						<p:outputLabel for="txtTipoSolicitud"
+							styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogAgregar.tipoSolicitud']}" />
+						<p:spacer width="10" />
+						<p:selectOneMenu id="txtTipoSolicitud" style="width: 200px"
+							value="#{cMantenerTk.boSolicitud.idTipoSolicitud}"
+							required="true"
+							requiredMessage="#{i18n['mantener_Tk.dialogAgregar.tipoSolicitudRequerido']}">
+							<p:ajax update="frmAgregarTk"
+								listener="#{cMantenerTk.mostrarPanel()}" />
+							<f:selectItem
+								itemLabel="#{i18n['mantener_Usuario.dialogAgregar.seleccioneRol']}"
+								itemValue="0" />
+							<f:selectItems
+								value="#{cMantenerTk.boSolicitud.listaTipoSolicitud}" />
+						</p:selectOneMenu>
+
+						<p:spacer width="10" />
+
+						<p:outputLabel for="txtPlataforma" styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogAgregar.plataforma']}" />
+						<p:spacer width="10" />
+						<p:selectOneMenu id="txtPlataforma" style="width: 200px"
+							value="#{cMantenerTk.boSolicitud.idPlataforma}" required="true"
+							requiredMessage="#{i18n['mantener_Tk.dialogAgregar.plataformaRequerido']}">
+							<f:selectItem
+								itemLabel="#{i18n['mantener_Usuario.dialogAgregar.seleccioneRol']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{cMantenerTk.boSolicitud.listaPlataforma}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</div>
+				<br />
+				<br />
+
+				<p:fieldset id="fstDatoSolicitud"
+					rendered="#{cMantenerTk.boSolicitud.mostrarDatoSolicitud}">
+					<h:panelGrid columns="4">
+						<h:panelGrid columns="3">
+
+							<p:outputLabel for="txtSolNegocio" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogAgregar.solNegocio']}"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:inputMask id="txtSolNegocio" required="true" size="30" mask="SN000******"
+								value="#{cMantenerTk.boDetalleSolicitud.snDetalleSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogAgregar.solNegocioRequerido']}"
+								maxlength="11"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+
+							<p:outputLabel for="txtSolTecnico" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogAgregar.solTecnico']}"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:inputMask id="txtSolTecnico" required="true" mask="ST000******"
+								value="#{cMantenerTk.boDetalleSolicitud.stDetalleSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogAgregar.solTecnicoRequerido']}"
+								size="30" maxlength="11"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+
+							<p:outputLabel for="txtSolServicio" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogAgregar.solServicio']}"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:inputMask id="txtSolServicio" required="true" mask="SS000******"
+								value="#{cMantenerTk.boDetalleSolicitud.ssDetalleSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogAgregar.solServicioRequerido']}"
+								size="30" maxlength="11"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+
+							<p:outputLabel for="txtIncidencia" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogAgregar.incidencia']}"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:inputMask id="txtIncidencia" required="true"
+								value="#{cMantenerTk.boDetalleSolicitud.incDetalleSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogAgregar.incidenciaRequerido']}"
+								size="30" maxlength="30"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+
+							<p:outputLabel for="txtTk" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogAgregar.tk']}" />
+							<p:spacer width="10" />
+							<p:inputMask id="txtTk" required="true" mask="TK000******"
+								value="#{cMantenerTk.boSolicitud.tkSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogAgregar.tkRequerido']}"
+								size="30" maxlength="30" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+							<p:outputLabel for="txtCrq" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogAgregar.crq']}" />
+							<p:spacer width="10" />
+							<p:inputMask id="txtCrq" required="true" mask="CRQ0000000*****"
+								value="#{cMantenerTk.boSolicitud.crqSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogAgregar.crqRequerido']}"
+								size="30" maxlength="15" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+							<p:outputLabel for="txtCriticidad" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogAgregar.criticidad']}" />
+							<p:spacer width="10" />
+							<p:inputText id="txtCriticidad" required="true"
+								value="#{cMantenerTk.boSolicitud.criticidadSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogAgregar.criticidadRequerido']}"
+								size="30" maxlength="30" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+							<p:outputLabel for="txtDominio" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogAgregar.dominio']}" />
+							<p:spacer width="40" />
+							<p:inputText id="txtDominio" required="true"
+								value="#{cMantenerTk.nombreDominio}"
+								requiredMessage="#{i18n['mantener_Tk.dialogAgregar.dominioRequerido']}"
+								size="30" maxlength="30" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+							<p:outputLabel for="txtVob" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogAgregar.vob']}" />
+							<p:spacer width="40" />
+							<p:inputText id="txtVob" required="true"
+								value="#{cMantenerTk.nombreVob}"
+								requiredMessage="#{i18n['mantener_Tk.dialogAgregar.vobRequerido']}"
+								size="30" maxlength="30" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+						</h:panelGrid>
+
+						<p:spacer width="100px" />
+						<p:spacer width="100px" />
+
+						<p:fieldset>
+							<h:panelGrid columns="3">
+								
+								<p:outputLabel for="txtAplicativo"
+									styleClass="miEstiloEtiqueta"
+									value="#{i18n['mantener_Tk.dialogAgregar.aplicativo']}" />
+								<p:inputText size="19" maxlength="19" value="#{cMantenerTk.nombreAplicativo}" >
+									<p:ajax event="keyup" update="txtAplicativo" 
+									listener="#{cMantenerTk.buscarCodigo()}" />
+								</p:inputText>
+								
+								<p:spacer width="10" />
+								<p:spacer width="10" />
+								<h:selectOneListbox id="txtAplicativo" required="true" size="15"
+									value="#{cMantenerTk.boSolicitud.idCodigoApp}"
+									requiredMessage="#{i18n['mantener_Tk.dialogAgregar.aplicativoRequerido']}">
+									<p:ajax update="txtVob txtDominio"
+										listener="#{cMantenerTk.obtenerInformacionAplicativo()}" />
+									<f:selectItem
+										itemLabel="#{i18n['mantener_Usuario.dialogModificar.seleccioneRol']}"
+										itemValue="#{null}" />
+									<f:selectItems
+										value="#{cMantenerTk.boSolicitud.listaAplicativo}" />
+								</h:selectOneListbox>
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
+				</p:fieldset>
+				<br />
+				<div align="center">
+					<h:panelGrid columns="3"
+						rendered="#{cMantenerTk.boSolicitud.mostrarDatoSolicitud}">
+						<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+							actionListener="#{cMantenerTk.agregarTk()}"
+							update=":frmMantenerTk :frmAgregarTk"
+							oncomplete="PF('wgvSolicitud').clearFilters()"
+							style="background-color:#c21315; color:white;border:none" />
+						<p:spacer width="10" />
+						<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+							onclick="PF('wgvAgregarTk').hide()" inmediate="true"
+							style="background-color:#c21315; color:white;border:none" />
+					</h:panelGrid>
+
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!--MODAL MODIFICAR Tk-->
+
+		<p:dialog header="#{i18n['mantener_Tk.dialogModificar.cabecera']}"
+			widgetVar="wgvModificarTk" appendTo="@(body)" modal="true"
+			height="500" showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmModificarTk">
+				<br />
+				<div align="center">
+					<h:panelGrid columns="7">
+						<p:outputLabel for="txtTipoSolicitud"
+							styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogModificar.tipoSolicitud']}" />
+						<p:spacer width="10" />
+						<p:selectOneMenu id="txtTipoSolicitud" style="width: 200px"
+							value="#{cMantenerTk.boSolicitud.idTipoSolicitud}"
+							required="true"
+							requiredMessage="#{i18n['mantener_Tk.dialogModificar.tipoSolicitudRequerido']}">
+							<p:ajax update="frmModificarTk"
+								listener="#{cMantenerTk.mostrarPanel()}" />
+							<f:selectItem
+								itemLabel="#{i18n['mantener_Usuario.dialogAgregar.seleccioneRol']}"
+								itemValue="0" />
+							<f:selectItems
+								value="#{cMantenerTk.boSolicitud.listaTipoSolicitud}" />
+						</p:selectOneMenu>
+
+						<p:spacer width="10" />
+
+						<p:outputLabel for="txtPlataforma" styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogModificar.plataforma']}" />
+						<p:spacer width="10" />
+						<p:selectOneMenu id="txtPlataforma" style="width: 200px"
+							value="#{cMantenerTk.boSolicitud.idPlataforma}" required="true"
+							requiredMessage="#{i18n['mantener_Tk.dialogModificar.plataformaRequerido']}">
+							<f:selectItem
+								itemLabel="#{i18n['mantener_Usuario.dialogAgregar.seleccioneRol']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{cMantenerTk.boSolicitud.listaPlataforma}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</div>
+				<br />
+				<br />
+
+				<p:fieldset id="fstDatoSolicitud">
+					<h:panelGrid columns="4">
+						<h:panelGrid columns="3">
+
+							<p:outputLabel for="txtSolNegocio" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogModificar.solNegocio']}"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:inputText id="txtSolNegocio" required="true"
+								value="#{cMantenerTk.boDetalleSolicitud.snDetalleSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogModificar.solNegocioRequerido']}"
+								size="30" maxlength="30"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+
+							<p:outputLabel for="txtSolTecnico" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogModificar.solTecnico']}"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:inputText id="txtSolTecnico" required="true"
+								value="#{cMantenerTk.boDetalleSolicitud.stDetalleSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogModificar.solTecnicoRequerido']}"
+								size="30" maxlength="30"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+
+							<p:outputLabel for="txtSolServicio" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogModificar.solServicio']}"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:inputText id="txtSolServicio" required="true"
+								value="#{cMantenerTk.boDetalleSolicitud.ssDetalleSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogModificar.solServicioRequerido']}"
+								size="30" maxlength="30"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+
+							<p:outputLabel for="txtIncidencia" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogModificar.incidencia']}"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:inputText id="txtIncidencia" required="true"
+								value="#{cMantenerTk.boDetalleSolicitud.incDetalleSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogModificar.incidenciaRequerido']}"
+								size="30" maxlength="30"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="10"
+								rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+
+							<p:outputLabel for="txtTk" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogModificar.tk']}" />
+							<p:spacer width="10" />
+							<p:inputText id="txtTk" required="true"
+								value="#{cMantenerTk.boSolicitud.tkSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogModificar.tkRequerido']}"
+								size="30" maxlength="30" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+							<p:outputLabel for="txtCrq" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogModificar.crq']}" />
+							<p:spacer width="10" />
+							<p:inputText id="txtCrq" required="true"
+								value="#{cMantenerTk.boSolicitud.crqSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogModificar.crqRequerido']}"
+								size="30" maxlength="30" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+							<p:outputLabel for="txtCriticidad" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogModificar.criticidad']}" />
+							<p:spacer width="10" />
+							<p:inputText id="txtCriticidad" required="true"
+								value="#{cMantenerTk.boSolicitud.criticidadSolicitud}"
+								requiredMessage="#{i18n['mantener_Tk.dialogModificar.criticidadRequerido']}"
+								size="30" maxlength="30" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+							<p:outputLabel for="txtDominio" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogModificar.dominio']}" />
+							<p:spacer width="40" />
+							<p:inputText id="txtDominio" required="true"
+								value="#{cMantenerTk.nombreDominio}"
+								requiredMessage="#{i18n['mantener_Tk.dialogModificar.dominioRequerido']}"
+								size="30" maxlength="30" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+							<p:outputLabel for="txtVob" styleClass="miEstiloEtiqueta"
+								value="#{i18n['mantener_Tk.dialogModificar.vob']}" />
+							<p:spacer width="40" />
+							<p:inputText id="txtVob" required="true"
+								value="#{cMantenerTk.nombreVob}"
+								requiredMessage="#{i18n['mantener_Tk.dialogModificar.vobRequerido']}"
+								size="30" maxlength="30" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+							<p:spacer width="10" />
+
+						</h:panelGrid>
+
+						<p:spacer width="100px" />
+						<p:spacer width="100px" />
+
+						<p:fieldset>
+							<h:panelGrid columns="3">
+								<h:panelGrid style="margin-top: -130px;">
+									<p:outputLabel for="txtAplicativo"
+										styleClass="miEstiloEtiqueta"
+										value="#{i18n['mantener_Tk.dialogModificar.aplicativo']}" />
+								</h:panelGrid>
+								<p:spacer width="10" />
+								<h:selectOneListbox id="txtAplicativo" required="true" size="15"
+									value="#{cMantenerTk.boSolicitud.idCodigoApp}"
+									requiredMessage="#{i18n['mantener_Tk.dialogModificar.aplicativoRequerido']}">
+									<p:ajax update="txtVob txtDominio"
+										listener="#{cMantenerTk.obtenerInformacionAplicativo()}" />
+									<f:selectItem
+										itemLabel="#{i18n['mantener_Usuario.dialogAgregar.seleccioneRol']}"
+										itemValue="#{null}" />
+									<f:selectItems
+										value="#{cMantenerTk.boSolicitud.listaAplicativo}" />
+								</h:selectOneListbox>
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
+				</p:fieldset>
+				<br />
+				<div align="center">
+					<h:panelGrid columns="3">
+						<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+							actionListener="#{cMantenerTk.modificarTk()}"
+							update=":frmMantenerTk :frmModificarTk"
+							oncomplete="PF('wgvSolicitud').clearFilters()"
+							style="background-color:#c21315; color:white;border:none" />
+						<p:spacer width="10" />
+						<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+							onclick="PF('wgvModificarTk').hide()" inmediate="true"
+							style="background-color:#c21315; color:white;border:none" />
+					</h:panelGrid>
+
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!--MODAL CONSULTAR Tk-->
+
+		<p:dialog header="#{i18n['mantener_Tk.dialogConsultar.cabecera']}"
+			widgetVar="wgvConsultarTk" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			width="60%" draggable="false">
+			<h:form id="frmConsultarTk">
+				<br />
+				
+				<div align="center">
+					<h:panelGrid columns="12">
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.solNegocio']}"
+							rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+						<p:spacer width="10" rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+						<p:outputLabel value="#{cMantenerTk.boDetalleSolicitud.snDetalleSolicitud}"
+							rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+						<p:spacer width="30" rendered="#{cMantenerTk.boSolicitud.mostrarSolNegocio}" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.solTecnico']}"
+							rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+						<p:spacer width="10" rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+						<p:outputLabel value="#{cMantenerTk.boDetalleSolicitud.stDetalleSolicitud}"
+							rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+						<p:spacer width="30" rendered="#{cMantenerTk.boSolicitud.mostrarSolTecnico}" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.solServicio']}"
+							rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+						<p:spacer width="10" rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+						<p:outputLabel value="#{cMantenerTk.boDetalleSolicitud.ssDetalleSolicitud}"
+							rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+						<p:spacer width="30" rendered="#{cMantenerTk.boSolicitud.mostrarSolServicio}" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.incidencia']}"
+							rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+						<p:spacer width="10" rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+						<p:outputLabel value="#{cMantenerTk.boDetalleSolicitud.incDetalleSolicitud}"
+							rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+						<p:spacer width="30" rendered="#{cMantenerTk.boSolicitud.mostrarIncidencia}" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.tk']}" />
+						<p:spacer width="10" />
+						<p:outputLabel value="#{cMantenerTk.boSolicitud.tkSolicitud}" />
+						<p:spacer width="30" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.crq']}" />
+						<p:spacer width="10" />
+						<p:outputLabel value="#{cMantenerTk.boSolicitud.crqSolicitud}" />
+						<p:spacer width="30" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.criticidad']}" />
+						<p:spacer width="10" />
+						<p:outputLabel value="#{cMantenerTk.boSolicitud.criticidadSolicitud}" />
+						<p:spacer width="30" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.plataforma']}" />
+						<p:spacer width="10" />
+						<p:outputLabel value="#{cMantenerTk.nombrePlataforma}" />
+						<p:spacer width="30" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.tipoSolicitud']}" />
+						<p:spacer width="10" />
+						<p:outputLabel value="#{cMantenerTk.nombreTipoSolicitud}" />
+						<p:spacer width="30" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.dominio']}" />
+						<p:spacer width="10" />
+						<p:outputLabel value="#{cMantenerTk.nombreDominio}" />
+						<p:spacer width="30" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.vob']}" />
+						<p:spacer width="10" />
+						<p:outputLabel value="#{cMantenerTk.nombreVob}" />
+						<p:spacer width="30" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Tk.dialogConsultar.aplicativo']}" />
+						<p:spacer width="10" />
+						<p:outputLabel value="#{cMantenerTk.boAplicativo.nombreAplicativo}" />
+						<p:spacer width="30" />
+					
+					</h:panelGrid>
+					<br />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

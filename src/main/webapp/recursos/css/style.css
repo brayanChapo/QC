@@ -1,0 +1,239 @@
+/*Color de fondo del cuerpo de la página */
+.ui-scrollpanel{
+	background: #ffffff;
+}
+
+body {
+/* 	height: 100%; */
+	font-family: verdana;
+	font-size: 12px;
+}
+
+#wrapper {
+	min-height: 100%;
+	position: relative;
+	
+}
+
+#content {
+	padding-bottom: 81px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
+	margin-top: 79px;
+	
+}
+
+.center-login {
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+	width: 276px;
+}
+
+.footerPage {
+	height: 81px;
+	background: #24567C;
+}
+
+.box-left {
+	float: left;
+	width: 477px;
+	height: 525px;
+	display: block;
+	text-align: center;
+	font-size: 15px;
+	color: #9BAE04;
+}
+
+.login {
+	margin-top: 11px;
+	padding-left: 45px;
+	float: right;
+	width: 400px;
+	height: 525px;
+	display: block;
+}
+
+.login .box {
+	text-align: center;
+	margin-top: 75px;
+	border-style: solid;
+	border-width: 1px;
+	height: 241px;
+	color: #9BAE04;
+}
+
+.login-estilos .ui-widget-content .ui-state-default {
+	background: #24567C;
+}
+
+.login-estilos .ui-panel-titlebar,.login-estilos .ui-widget-header,.login-estilos .ui-menu,.login-estilos .ui-menubar,.login-estilos .ui-megamenu
+	{
+	background: #24567C;
+}
+
+.login-estilos .ui-inputfield,.login-estilos .ui-widget-content .ui-inputfield,.login-estilos .ui-widget-header .ui-inputfield
+	{
+	background: white;
+}
+
+.login-estilos .column1 {
+	width: 12.5%
+}
+
+.login-estilos .ui-layout-container {
+	font-size: 11px;
+}
+
+.submit-button {
+	margin-top: 12px;
+}
+
+/* .plantilla-menu .ui-widget-content .ui-state-default { */
+/* 	background: #ffffff; */
+/* } */
+
+/* .plantilla-menu .ui-layout-north { */
+/* 	z-index: 20 !important; */
+/* 	overflow: visible !important; */
+/* } */
+
+/* .plantilla-menu .ui-layout-unit-content { */
+/* 	overflow: visible !important; */
+/* } */
+
+/* .plantilla-menu .ui-panel-titlebar,.ui-widget-header,.ui-menu,.ui-menubar,.ui-megamenu */
+/* 	{ */
+/* 	background: #ffffff; */
+/* } */
+
+/* .plantilla-menu .ui-inputfield,.ui-widget-content .ui-inputfield,.ui-widget-header .ui-inputfield */
+/* 	{ */
+/* 	background: white !important; */
+/* } */
+
+/* .plantilla-menu .column1 { */
+/* 	width: 12.5% */
+/* } */
+
+/* .plantilla-menu .ui-layout-container { */
+/* 	font-size: 11px; */
+/* } */
+
+/* .plantilla-menu span.ui-menuitem-text { */
+/* 	float: left; */
+/* 	background: #ffffff; */
+/* } */
+
+/* .plantilla-menu .menuItems ul li a span.ui-menuitem-text { */
+/* 	float: left; */
+/* 	background: #ffffff; */
+/* } */
+
+.column7 {
+	width: 50% !important
+}
+
+.column2 {
+	width: 50% !important
+}
+
+.column3 {
+	width: 20% !important
+}
+
+.column4 {
+	width: 50% !important
+}
+
+.column5 {
+	width: 30% !important
+}
+
+.column6 {
+	width: 12.5% !important
+}
+
+.panelOtros td {
+	border-width: 1px;
+	border-style: none !important;
+	border-color: inherit;
+	padding: 4px 10px;
+	background: #ffffff;
+}
+
+.overflow-auto {
+	overflow: auto !important;
+}
+
+.ocultar-nombre-columnas table thead tr {
+	display: none;
+}
+
+.border-radiuos-cero .ui-datatable-header {
+	border-radius: 0px !important;
+}
+
+.texto .gridcell {
+	text-align: left !important;
+}
+
+.texto .ui-panelgrid-header {
+	text-align: center !important;
+}
+
+.texto .ui-widget-content tr {
+	tex-alitn: left !important
+}
+
+ul li.ui-menuitem-active>a {
+	background: #ffffff;
+}
+
+li ul li.ui-menuitem-active>a {
+	background-image: none ;
+	color: white;
+	background: #ffffff;
+}
+
+.ui-widget-content .ui-state-default,.ui-panel-titlebar,.ui-widget-header
+	{
+	background: #FFFFFF;
+}
+
+
+.mensajeAdvertenciaHoraInvalida {
+	color: red !important;
+}
+
+.mensajeAdvertenciaHoraCorrecta {
+	color: #179E0D !important;
+}
+
+/* Estilos CSS personalizados por PAME */
+
+.miEstiloEtiqueta {
+	font-weight: bold;
+	font-style: italic;
+}
+
+.miEstiloPieChart1 {
+	colors : #ff0000 !important;
+	
+}
+
+.miEstiloPieChart2 {
+	colors: #2200ff !important;
+	
+}
+
+.colorPlata {
+	background-color: silver !important;
+}
+
+.ui-tabs-selected .ui-state-active{
+	background-color: #000000 !important;
+} 
+
+

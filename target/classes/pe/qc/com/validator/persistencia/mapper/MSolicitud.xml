@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MSolicitud"> <!-- interface java -->
+
+	<resultMap id="bSolicitud" type="pe.qc.com.validator.persistencia.entity.BSolicitud">
+		<id column="id_solicitud" property="idSolicitud" />
+		<result column="id_detalle_sol" property="idDetalleSolicitud" />
+		<result column="id_tipo_sol" property="idTipoSolicitud" />
+		<result column="id_estado_sol" property="idEstadoSolicitud" />
+		<result column="id_codigo_ap" property="idCodigoApp" />
+		<result column="id_usuario" property="idUsuario" />
+		<result column="id_revisor" property="idRevisor" />
+		<result column="id_plataforma" property="idPlataforma" />
+		<result column="val_id_solicitud" property="idHistoricoSolicitud" />
+		<result column="tk_solicitud" property="tkSolicitud" />
+		<result column="crq_solicitud" property="crqSolicitud" />
+		<result column="criticidad_solicitud" property="criticidadSolicitud" />
+		<result column="esHistorico_solicitud" property="esHistorico" />
+		<result column="fecha_solicitud" property="fechaSolicitud" />
+	</resultMap>
+	
+	<resultMap id="mapSolicitud" type="java.util.Map">
+		<id column="id_solicitud" property="idSolicitud" />
+		<result column="id_detalle_sol" property="idDetalleSolicitud" />
+		<result column="id_tipo_sol" property="idTipoSolicitud" />
+		<result column="nombre_tipo_sol" property="nombreTipoSolicitud" />
+		<result column="id_estado_sol" property="idEstadoSolicitud" />
+		<result column="nombre_estado_sol" property="nombreEstadoSolicitud" />
+		<result column="id_codigo_ap" property="idCodigoApp" />
+		<result column="nombre_codigo_ap" property="nombreAplicativo" />
+		<result column="id_vob" property="idVob" />
+		<result column="id_dominio" property="idDominio" />
+		<result column="nombre_vob" property="nombreVob" />
+		<result column="nombre_dominio" property="nombreDominio" />
+		<result column="id_usuario" property="idUsuario" />
+		<result column="nombre_usuario" property="nombreUsuario" />
+		<result column="id_revisor" property="idRevisor" />
+		<result column="nombre_revisor" property="nombreRevisor" />
+		<result column="id_plataforma" property="idPlataforma" />
+		<result column="plataforma_nombre" property="nombrePlataforma" />
+		<result column="val_id_solicitud" property="idHistoricoSolicitud" />
+		<result column="tk_solicitud" property="tkSolicitud" />
+		<result column="crq_solicitud" property="crqSolicitud" />
+		<result column="criticidad_solicitud" property="criticidadSolicitud" />
+		<result column="esHistorico_solicitud" property="esHistorico" />
+		<result column="fecha_solicitud" property="fechaSolicitud" />			
+	</resultMap>
+	
+	<resultMap id="mapSolicitudReporte" type="java.util.Map">
+		<result column="id_solicitud" property="idSolicitud" />
+		<result column="tk_solicitud" property="tkSolicitud" />
+		<result column="crq_solicitud" property="crqSolicitud" />
+		<result column="id_estado_sol" property="idEstadoSolicitud" />
+		<result column="nombre_dominio" property="nombreDominio" />
+		<result column="nombre_usuario" property="nombreUsuario" />
+		<result column="fecha_solicitud" property="fechaSolicitud" />	
+	</resultMap>
+	
+	<resultMap id="mapSolicitudReporteQC" type="java.util.Map">
+		<result column="id_solicitud" property="idSolicitud" />
+		<result column="val_id_solicitud" property="idHistorico" />
+		<result column="tk_solicitud" property="tkSolicitud" />
+		<result column="crq_solicitud" property="crqSolicitud" />
+		<result column="criticidad_solicitud" property="criticidadSolicitud" />
+		<result column="fecha_solicitud" property="fechaSolicitudFinalizada" />
+		<result column="sn_detalle_sol" property="snDetalleSolicitud" />
+		<result column="st_detalle_sol" property="stDetalleSolicitud" />
+		<result column="ss_detalle_sol" property="ssDetalleSolicitud" />
+		<result column="inc_detalle_sol" property="incDetalleSolicitud" />
+		<result column="nombre_codigo_ap" property="codigoAplicativo" />
+		<result column="nombre_dominio" property="nombreDominio" />
+		<result column="nombre_vob" property="nombreVob" />
+		<result column="nombre_usuario" property="nombreRevisor" />
+		<result column="id_estado_sol" property="idEstadoSolicitud" />
+	</resultMap> 
+
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+	version="2.1">
+
+	<application>
+		<!-- Dejar que Spring se encargue de gestionar los ManagedBeans -->
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+
+		<!-- Configuracion de i18N -->
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+		<resource-bundle>
+			<!-- Ubicacion de los properties -->
+			<base-name>i18n.messages</base-name>
+			<!-- Identificador para acceder a los mensajes -->
+			<var>i18n</var>
+		</resource-bundle>
+	</application>
+	
+	<lifecycle>
+		<phase-listener>pe.qc.com.validator.presentacion.controlador.CLogin</phase-listener>
+	</lifecycle> 
+	<lifecycle>
+		<phase-listener id="nocache">pe.qc.com.validator.util.CacheControlPhaseListener</phase-listener>
+	</lifecycle>
+	
+</faces-config>

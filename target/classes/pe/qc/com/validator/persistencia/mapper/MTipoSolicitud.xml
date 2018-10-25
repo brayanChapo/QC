@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MTipoSolicitud"> <!-- interface java -->
+
+	<resultMap id="bTipoSolicitud"
+		type="pe.qc.com.validator.persistencia.entity.BTipoSolicitud">
+		<id column="id_tipo_sol" property="idTipoSolicitud" />
+		<result column="nombre_tipo_sol" property="nombreTipoSolicitud" />
+	</resultMap>
+
+</mapper>

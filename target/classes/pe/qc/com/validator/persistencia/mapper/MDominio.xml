@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MDominio"> <!-- interface java -->
+
+	<resultMap id="bDominio"
+		type="pe.qc.com.validator.persistencia.entity.BDominio">
+		<id column="id_Dominio" property="idDominio" />
+		<result column="nombre_Dominio" property="nombreDominio" />
+		<result column="descripcion_Dominio" property="descripcionDominio" />
+	</resultMap>
+
+</mapper>

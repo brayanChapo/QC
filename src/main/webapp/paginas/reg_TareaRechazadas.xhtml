@@ -1,0 +1,498 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmTareaRechaza">
+			<p:growl id="mensajes" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['tarea_rechazada.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+
+			<div align="center">
+				<h:panelGrid width="90%">
+					<br />
+					<p:commandButton id="btnAgregarTarea"
+						value="#{i18n['VALIDATOR.opcionAgregar']}"
+						actionListener="#{cTareaRechazada.iniciarAgregarTarea()}"
+						update=":frmAgregarTarea">
+						<p:resetInput target=":frmAgregarTarea" />
+					</p:commandButton>
+					<br />
+					<br />
+
+					<center>
+						<br />
+						<p:dataTable id="tblTarea" widgetVar="wgvTarea"
+							value="#{cTareaRechazada.listaMapTarea}" var="Tarea"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							emptyMessage="#{i18n['tarea_rechazada.tablaVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cTareaRechazada.listaMapTarea.indexOf(Tarea)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['tarea_rechazada.nombreTarea']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Tarea.nombreTarea}" filterStyle="width:250px;">
+								<h:outputText value="#{Tarea.nombreTarea}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['tarea_rechazada.crq']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Tarea.crqTarea}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['tarea_rechazada.tipoTarea']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Tarea.nombreTipoTarea}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['tarea_rechazada.equipoTarea']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Tarea.nombreEquipoTarea}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['tarea_rechazada.etapaTarea']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Tarea.nombreEtapaTarea}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['tarea_rechazada.fecha']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Tarea.fechaTarea}" />
+							</p:column>
+							
+							<p:column headerText="Descargar Correo" style="width:100px; text-align: center;">
+								<p:commandButton id="btnDescargarCorreo"
+									disabled="#{Tarea.nombreTipoTarea eq 'Tarea Rechazada'}"
+									icon="ui-icon-circle-arrow-s" ajax="false"
+									actionListener="#{cTareaRechazada.iniciarDescargarCorreo(Tarea.idTarea)}">
+									<p:fileDownload
+										value="#{cTareaRechazada.boTarea.archivoTareaStreamed}" />
+								</p:commandButton>
+								<p:tooltip for="btnDescargarCorreo"
+									value="#{i18n['MFMF.opcionDescargar']}" />
+							</p:column>
+							
+							<p:column headerText="Consultar Información" style="width:100px; text-align: center;">
+								<p:commandButton id="btnConsultar"
+									icon="ui-icon-search"
+									actionListener="#{cTareaRechazada.mostrarTarea(Tarea.idTarea)}"
+									update=":frmConsultarTarea">
+								</p:commandButton>
+								<p:tooltip for="btnConsultar"
+									value="#{i18n['VALIDATOR.opcionConsultar']}" />
+							</p:column>
+							
+							<p:column headerText="Eliminar TASK" style="width:100px; text-align: center;">
+								<p:commandButton id="btnEliminarTAS"
+									icon="ui-icon-trash"								
+									actionListener="#{cTareaRechazada.setMapTarea(Tarea)}"
+									onclick="PF('wgvEliminarTarea').show()"
+									update=":frmEliminarTAS"/>
+								<p:tooltip for="btnEliminarTAS"
+									value="#{i18n['VALIDATOR.opcionEliminar']}" />
+							</p:column>
+
+						</p:dataTable>
+					</center>
+
+				</h:panelGrid>
+			</div>
+
+		</h:form>
+		
+		
+		<!-- 		DIALOG DE AGREGA TASK -->
+		<p:dialog header="#{i18n['validar_mis.dialogValidar.cabecera']}"
+			widgetVar="wgvAgregarTarea" appendTo="@(body)" modal="true"
+			position="top" showEffect="fade" hideEffect="fade" resizable="false"
+			width="50%" draggable="false">
+			<h:form id="frmAgregarTarea">
+				<br />
+				<div align="center">
+					<h:panelGrid columns="3">
+						<p:outputLabel for="txtTipoTarea" styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.tipoTarea']}" />
+						<p:spacer width="10" />
+						<p:selectOneMenu id="txtTipoTarea" style="width: 200px"
+							value="#{cTareaRechazada.boTarea.idTipoTarea}" required="true"
+							requiredMessage="#{i18n['tarea_rechazada.dialogAgregar.seleccioneTipo']}">
+							<p:ajax update="frmAgregarTarea" listener="#{cTareaRechazada.mostrarPanel()}" />
+							<f:selectItem 
+								itemLabel="#{i18n['tarea_rechazada.dialogAgregar.seleccioneTipoTarea']}"
+								itemValue="0" />
+							<f:selectItems value="#{cTareaRechazada.boTarea.listaTipoTarea}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</div>
+				<br />
+				<br />
+				<p:fieldset id="fstDatoTarea"
+					rendered="#{cTareaRechazada.boTarea.mostrarCampos}">
+					<h:panelGrid columns="7">
+						<p:outputLabel for="txtTk" styleClass="miEstiloEtiqueta" 
+							value="#{i18n['tarea_rechazada.dlgAgreagar.tk']}" />
+						<p:spacer width="10" />
+						<p:inputText id="txtTk"
+							placeholder="Copie el N° del TK"
+							value="#{cTareaRechazada.nombreTK}" requiredMessage="#{i18n['tarea_rechazada.dlgAgreagar.tkRequeerido']}"
+							size="37" maxlength="11"> 
+							<p:ajax event="keypress" update="fstDatoTarea btnCargarCorreo" listener="#{cTareaRechazada.buscarTK()}" />
+						</p:inputText>
+						
+						<p:spacer width="30" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta" value="#{i18n['tarea_rechazada.dlgAgreagar.tipoSolicitud']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cTareaRechazada.boTipoSolicitud.nombreTipoSolicitud}"
+							size="37" maxlength="30" readonly="true" />
+							
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.dlgAgreagar.solNegocio']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cTareaRechazada.boDetalleSolicitud.snDetalleSolicitud}" size="37" maxlength="30" readonly="true" />
+
+						<p:spacer width="30" />
+						
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.dlgAgreagar.solTecnico']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cTareaRechazada.boDetalleSolicitud.stDetalleSolicitud}" 
+							size="37" maxlength="30" readonly="true" /> 
+							
+						<p:outputLabel styleClass="miEstiloEtiqueta" 
+							value="#{i18n['tarea_rechazada.dlgAgreagar.solServicio']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cTareaRechazada.boDetalleSolicitud.ssDetalleSolicitud}" 
+							size="37" maxlength="30" readonly="true" />
+
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.dlgAgreagar.incidencia']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cTareaRechazada.boDetalleSolicitud.incDetalleSolicitud}" 
+							size="37" maxlength="30" readonly="true" />
+							
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.dlgAgreagar.vob']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cTareaRechazada.boVob.nombreVob}" size="37"
+							maxlength="30" readonly="true" />
+
+						<p:spacer width="30" />
+
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.dlgAgreagar.dominio']}" />
+						<p:spacer width="10" />
+						<p:inputText value="#{cTareaRechazada.boDominio.nombreDominio}"
+							size="37" maxlength="30" readonly="true" />
+							
+						<p:outputLabel styleClass="miEstiloEtiqueta" 
+							value="#{i18n['tarea_rechazada.dlgAgreagar.codigoAplicativo']}" /> 
+						<p:spacer width="10" />
+						<p:inputText value="#{cTareaRechazada.boAplicativo.nombreAplicativo}"
+							size="37" maxlength="30" readonly="true" />
+
+						<p:spacer width="30" />
+
+						<p:outputLabel for="crq" styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.dlgAgreagar.crq']}" />
+						<p:spacer width="10" />
+						<p:inputMask id="crq" mask="CRQ000000******" required="true"
+							value="#{cTareaRechazada.boTarea.crqTarea}" size="37"
+							maxlength="30" />
+							
+						<p:outputLabel for="tas" styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.dlgAgreagar.task']}" />
+						<p:spacer width="10" />
+						<p:inputMask id="tas" mask="TAS************" required="true"
+							value="#{cTareaRechazada.boTarea.nombreTarea}" size="37"
+							maxlength="30" />
+
+						<p:spacer width="30" />
+
+						<p:outputLabel for="des" styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.dlgAgreagar.descripcionRechazo']}"/> 
+						<p:spacer width="10" />
+						<p:inputTextarea id="des" required="true"
+							value="#{cTareaRechazada.boTarea.descripcionTarea}"
+							autoResize="false" maxlength="150" rows="6" cols="35" /> 
+						
+						<p:outputLabel for="txtEtapa" styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.etapaTarea']}"
+							rendered="#{cTareaRechazada.boTarea.mostrarEtapa}" />
+						<p:spacer width="10"
+							rendered="#{cTareaRechazada.boTarea.mostrarEtapa}" />
+						<p:selectOneMenu id="txtEtapa" style="width: 200px"
+							value="#{cTareaRechazada.boTarea.idEtapaTarea}" 
+							
+							rendered="#{cTareaRechazada.boTarea.mostrarEtapa}">
+							<f:selectItem itemLabel="#{i18n['tarea_rechazada.dialogAgregar.seleccioneTipoTarea']}" 
+								itemValue="null" />
+							<f:selectItems value="#{cTareaRechazada.boTarea.listaEtapa}" />
+						</p:selectOneMenu>
+
+						<p:spacer width="30" rendered="#{cTareaRechazada.boTarea.mostrarEtapa}" />
+
+						<p:outputLabel for="txtEquipo" styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.equipoTarea']}"
+							rendered="#{cTareaRechazada.boTarea.mostrarEquipo}" />
+						<p:spacer width="10"
+							rendered="#{cTareaRechazada.boTarea.mostrarEquipo}" />
+						<p:selectOneMenu id="txtEquipo" style="width: 200px; margin-bottom: 10px;;"
+							value="#{cTareaRechazada.boTarea.idEquipoTarea}"  required="true" 
+							requiredMessage="#{i18n['tarea_rechazada.dialogAgregar.seleccioneEquipo']}"
+							rendered="#{cTareaRechazada.boTarea.mostrarEquipo}">
+							<f:selectItem
+								itemLabel="#{i18n['tarea_rechazada.dialogAgregar.seleccioneTipoTarea']}"
+								itemValue="null" />
+							<f:selectItems value="#{cTareaRechazada.boTarea.listaEquipo}" /> 
+
+						</p:selectOneMenu>
+
+						<p:spacer width="30" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}" />
+						
+						<p:outputLabel for="wo" styleClass="miEstiloEtiqueta"
+							value="#{i18n['tarea_rechazada.dlgAgreagar.wo']}" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						<p:spacer width="10" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						<p:inputMask id="wo" mask="WO*************" required="true"
+							value="#{cTareaRechazada.boTarea.woTarea}" size="37"
+							maxlength="30" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						
+						<p:spacer width="10" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						<p:spacer width="10" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						<p:spacer width="10" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						<p:spacer width="10" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						<p:spacer width="10" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						<p:spacer width="10" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						<p:spacer width="10" rendered="#{cTareaRechazada.boTarea.mostrarEquipo}"/>
+						
+						<p:commandButton id="btnCargarCorreo"
+							value="#{i18n['validator_mis.dialogValidar.adjuntarTxt']}"
+							actionListener="#{cTareaRechazada.iniciarCargaCorreo()}"
+							disabled="#{cTareaRechazada.boTarea.mostrarBoton}"
+							update=":frmAgregarTarea :frmConfirmarCorreo" />
+						<p:tooltip for="btnCargarCorreo"
+							value="#{i18n['VALIDATOR.opcionCargar']}" />
+						
+						<p:outputLabel style="color:#c21315;" value="#{i18n['tarea_rechazada.dialogAgregar.correoAdjuntado']}"
+							rendered="#{cTareaRechazada.boTarea.mostrarMensaje}" />
+									
+					</h:panelGrid>
+				</p:fieldset>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cTareaRechazada.agregarTarea()}"
+						update=":frmAgregarTarea :frmTareaRechaza"
+						oncomplete="PF('wgvTarea').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvAgregarTarea').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />	
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		
+		<!-- 		DIALOG Consultar Tarea -->
+		<p:dialog header="Consultar Tarea" widgetVar="wgvConsultarTarea"
+			appendTo="@(body)" id="dlgConsultarTarea" modal="true"
+			resizable="false" draggable="false" showEffect="fade"
+			hideEffect="fade">
+			<h:form id="frmConsultarTarea">
+				<p:panelGrid columns="8">
+					<p:spacer width="30" />
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.tipoRequerimiento']}" />
+					<p:spacer width="10" />
+					<p:inputText value="#{cTareaRechazada.boTipoTarea.nombreTipoTarea}" size="30"
+						maxlength="30" readonly="true" />
+
+					<p:spacer width="30" />
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.tipoSolicitud']}" />
+					<p:spacer width="10" />
+					<p:inputText value="#{cTareaRechazada.boTipoSolicitud.nombreTipoSolicitud}"
+						size="30" maxlength="30" readonly="true" />
+					
+					<p:spacer width="30" rendered="#{cTareaRechazada.mostrarSN}"/>
+					<p:outputLabel styleClass="miEstiloEtiqueta" rendered="#{cTareaRechazada.mostrarSN}"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.solNegocio']}" />
+					<p:spacer width="10" rendered="#{cTareaRechazada.mostrarSN}"/>
+					<p:inputText value="#{cTareaRechazada.boDetalleSolicitud.snDetalleSolicitud}" size="30"
+						maxlength="30" readonly="true" rendered="#{cTareaRechazada.mostrarSN}"/>
+
+					<p:spacer width="30" rendered="#{cTareaRechazada.mostrarSS}"/>
+					<p:outputLabel styleClass="miEstiloEtiqueta" rendered="#{cTareaRechazada.mostrarSS}"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.solServicio']}" />
+					<p:spacer width="10" rendered="#{cTareaRechazada.mostrarSS}"/>
+					<p:inputText value="#{cTareaRechazada.boDetalleSolicitud.ssDetalleSolicitud}"
+						size="30" maxlength="30" readonly="true" rendered="#{cTareaRechazada.mostrarSS}"/>
+					
+					<p:spacer width="30" rendered="#{cTareaRechazada.mostrarSN}"/>	
+					<p:outputLabel styleClass="miEstiloEtiqueta" rendered="#{cTareaRechazada.mostrarSN}"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.solTecnico']}" />
+					<p:spacer width="10" rendered="#{cTareaRechazada.mostrarSN}"/>
+					<p:inputText value="#{cTareaRechazada.boDetalleSolicitud.stDetalleSolicitud}" size="30"
+						maxlength="30" readonly="true" rendered="#{cTareaRechazada.mostrarSN}"/>
+
+					<p:spacer width="30" />
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.tk']}" />
+					<p:spacer width="10" />
+					<p:inputText value="#{cTareaRechazada.boSolicitud.tkSolicitud}"
+						size="30" maxlength="30" readonly="true" />
+					
+					<p:spacer width="30" />	
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.dominio']}" />
+					<p:spacer width="10" />
+					<p:inputText value="#{cTareaRechazada.boDominio.nombreDominio}" size="30"
+						maxlength="30" readonly="true" />
+
+					<p:spacer width="30" />
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.vob']}" />
+					<p:spacer width="10" />
+					<p:inputText value="#{cTareaRechazada.boVob.nombreVob}"
+						size="30" maxlength="30" readonly="true" />	
+					
+					<p:spacer width="30" />	
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.crq']}" />
+					<p:spacer width="10" />
+					<p:inputText value="#{cTareaRechazada.boTarea.crqTarea}" size="30"
+						maxlength="30" readonly="true" />
+
+					<p:spacer width="30" />
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.task']}" />
+					<p:spacer width="10" />
+					<p:inputText value="#{cTareaRechazada.boTarea.nombreTarea}"
+						size="30" maxlength="30" readonly="true" />
+						
+					<p:spacer width="30" />
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.codigoAplicativo']}" />
+					<p:spacer width="10" />
+					<p:inputText value="#{cTareaRechazada.boAplicativo.nombreAplicativo}"
+						size="30" maxlength="30" readonly="true" />	
+						
+					<p:spacer width="30" />
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.wo']}" />
+					<p:spacer width="10" />
+					<p:inputText value="#{cTareaRechazada.boTarea.woTarea}"
+						size="30" maxlength="30" readonly="true" />	
+					
+					<p:spacer width="30" rendered="#{cTareaRechazada.mostrarINC}"/>
+					<p:outputLabel styleClass="miEstiloEtiqueta" rendered="#{cTareaRechazada.mostrarINC}"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.incidencia']}" />
+					<p:spacer width="10" rendered="#{cTareaRechazada.mostrarINC}"/>
+					<p:inputText value="#{cTareaRechazada.boDetalleSolicitud.incDetalleSolicitud}" size="30"
+						maxlength="30" readonly="true" rendered="#{cTareaRechazada.mostrarINC}"/>
+
+					<p:spacer width="30" rendered="#{cTareaRechazada.mostrarEquipo}"/>
+					<p:outputLabel styleClass="miEstiloEtiqueta" rendered="#{cTareaRechazada.mostrarEquipo}"
+						value="#{i18n['tarea_rechazada.equipoTarea']}" />
+					<p:spacer width="10" rendered="#{cTareaRechazada.mostrarEquipo}"/>
+					<p:inputText value="#{cTareaRechazada.boEquipo.nombreEquipo}" 
+						size="30" maxlength="30" readonly="true" 
+						rendered="#{cTareaRechazada.mostrarEquipo}"/>
+
+					<p:spacer width="30" rendered="#{cTareaRechazada.mostrarEtapa}"/>
+					<p:outputLabel styleClass="miEstiloEtiqueta" rendered="#{cTareaRechazada.mostrarEtapa}"
+						value="#{i18n['tarea_rechazada.etapaTarea']}" />
+					<p:spacer width="10" rendered="#{cTareaRechazada.mostrarEtapa}"/>
+					<p:inputText value="#{cTareaRechazada.boEtapa.nombreEtapa}"
+						size="30" maxlength="30" readonly="true" rendered="#{cTareaRechazada.mostrarEtapa}"/>
+						
+					<p:spacer width="30" />
+					<p:outputLabel styleClass="miEstiloEtiqueta"
+						value="#{i18n['tarea_rechazada.dlgAgreagar.descripcionRechazo']}" />
+					<p:spacer width="10" />
+					<p:inputTextarea value="#{cTareaRechazada.boTarea.descripcionTarea}" 
+						autoResize="false" maxlength="150" rows="6" cols="28" readonly="true" />
+					
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		
+		<!-- 		DIALOG AGREGAR CORREO -->
+		<p:dialog header="Cargar Correo" widgetVar="wgvCargarCorreo"
+			appendTo="@(body)" id="dlgCargarCorreo" modal="true"
+			resizable="false" draggable="false" showEffect="fade"
+			hideEffect="fade">
+
+			<h:form id="frmConfirmarCorreo" enctype="multipart/form-data">
+				<p:panelGrid columns="3">
+					<p:outputLabel for="upfCorreo" styleClass="miEstiloEtiqueta"
+						value="Correo" />
+					<p:spacer width="10" />
+					<p:fileUpload id="upfCorreo" mode="advanced"
+						fileUploadListener="#{cTareaRechazada.boTarea.cargarDocumento}"
+						label="#{i18n['VALIDATOR.documento']}"
+						uploadLabel="#{i18n['VALIDATOR.opcionCargar']}"
+						cancelLabel="#{i18n['VALIDATOR.opcionCancelar']}" fileLimit="1"
+						fileLimitMessage="#{i18n['VALIDATOR.limiteArchivosNoValido']}"
+						allowTypes="/(\.|\/)(msg)$/"
+						invalidFileMessage="#{i18n['VALIDATOR.tipoArchivoNoValido']}"
+						sizeLimit="2621440000000"
+						invalidSizeMessage="#{i18n['VALIDATOR.tamanioArchivoNoValido']}" />
+				</p:panelGrid>
+
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cTareaRechazada.archivoCargado()}"
+						update=":frmConfirmarCorreo :frmAgregarTarea"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvCargarCorreo').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<!-- MODAL DE CONFIRMACION DE ELIMINACION -->
+		<p:confirmDialog
+			header="#{i18n['tarea_rechazada.dialogEliminar.cabecera']}"
+			message="#{i18n['tarea_rechazada.dialogEliminar.mensajeConfirmacion']}"
+			showEffect="fade" hideEffect="fade" widgetVar="wgvEliminarTarea"
+			appendTo="@(body)">
+			<h:form id="frmEliminarTAS">
+				<center>
+					<p:commandButton value="#{i18n['MFMF.opcionSi']}"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+						actionListener="#{cTareaRechazada.eliminarTarea()}"
+						update=":frmEliminarTAS :frmTareaRechaza"
+						oncomplete="PF('wgvTarea').clearFilters()" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionNo']}"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+						onclick="PF('wgvEliminarTarea').hide()" />
+				</center>
+			</h:form>
+		</p:confirmDialog>
+		
+		
+	</ui:define>
+</ui:composition>

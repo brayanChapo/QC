@@ -1,0 +1,674 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+		<h:form id="frmValidarMISTk">
+			<p:growl id="mensajes" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['validar_mis.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<br />
+
+			<div align="center">
+				<h:panelGrid width="80%">
+					<br />
+					<br />
+					<center>
+						<br />
+						<p:dataTable id="tblSolicitud" widgetVar="wgvSolicitud"
+							value="#{cValidarMIS.listaSolicitud}" var="Solicitud"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="5" paginatorPosition="bottom"
+							emptyMessage="#{i18n['validar_mis.tablaAplicativoVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cValidarMIS.listaSolicitud.indexOf(Solicitud)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['validar_mis.nombreTK']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Solicitud.tkSolicitud}" filterStyle="width:200px;">
+								<h:outputText value="#{Solicitud.tkSolicitud}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['validar_mis.CRQTK']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Solicitud.crqSolicitud}" filterStyle="width:200px;">
+								<h:outputText value="#{Solicitud.crqSolicitud}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['validar_mis.criticidadTK']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Solicitud.criticidadSolicitud}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['validar_mis.fechaTK']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Solicitud.fechaSolicitud}">
+									<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss" timeZone="America/Lima" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{i18n['validar_mis.opcionesAplicativo']}"
+								style="width:150px; text-align: center;">
+								<div align="center">
+									<p:commandButton id="btnValidarSolicitud"
+										icon="ui-icon-circle-triangle-n"
+										actionListener="#{cValidarMIS.consultarInformacion(Solicitud)}"
+										update=":frmValidarTk">
+										<p:resetInput target=":frmValidarTk" />
+									</p:commandButton>
+									<p:tooltip for="btnValidarSolicitud"
+										value="#{i18n['VALIDATOR.opcionValidar']}" />
+								</div>
+							</p:column>
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+
+			</div>
+
+		</h:form>
+
+		<!--MODAL VALIDAR Tk-->
+
+		<p:dialog header="#{i18n['validar_mis.dialogValidar.cabecera']}"
+			widgetVar="wgvValidarTk" appendTo="@(body)" modal="true"
+			position="top" showEffect="fade" hideEffect="fade" resizable="false"
+			width="80%" draggable="false">
+			<h:form id="frmValidarTk">
+				<br />
+				<div align="center">
+					<p:fieldset
+						legend="#{i18n['validar_mis.dialogValidar.fieldInformacion']}">
+						<h:panelGrid columns="12">
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.tipoSolicitud']}" />
+							<p:spacer width="10" />
+							<p:outputLabel
+								value="#{cValidarMIS.fInformacionTk.tipoSolicitud}" />
+							<p:spacer width="30" />
+
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.solNegocio']}"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="10"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolNegocio}" />
+							<p:outputLabel value="#{cValidarMIS.fInformacionTk.sn}"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolNegocio}" />
+							<p:spacer width="30"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolNegocio}" />
+
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.solTecnico']}"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="10"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolTecnico}" />
+							<p:outputLabel value="#{cValidarMIS.fInformacionTk.st}"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolTecnico}" />
+							<p:spacer width="30"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolTecnico}" />
+
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.solServicio']}"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="10"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolServicio}" />
+							<p:outputLabel value="#{cValidarMIS.fInformacionTk.ss}"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolServicio}" />
+							<p:spacer width="30"
+								rendered="#{cValidarMIS.boSolicitud.mostrarSolServicio}" />
+
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.incidencia']}"
+								rendered="#{cValidarMIS.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="10"
+								rendered="#{cValidarMIS.boSolicitud.mostrarIncidencia}" />
+							<p:outputLabel value="#{cValidarMIS.fInformacionTk.inc}"
+								rendered="#{cValidarMIS.boSolicitud.mostrarIncidencia}" />
+							<p:spacer width="30"
+								rendered="#{cValidarMIS.boSolicitud.mostrarIncidencia}" />
+
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.tk']}" />
+							<p:spacer width="10" />
+							<p:outputLabel value="#{cValidarMIS.fInformacionTk.tk}" />
+							<p:spacer width="30" />
+
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.crq']}" />
+							<p:spacer width="10" />
+							<p:outputLabel value="#{cValidarMIS.fInformacionTk.crq}" />
+							<p:spacer width="30" />
+
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.dominio']}" />
+							<p:spacer width="10" />
+							<p:outputLabel value="#{cValidarMIS.fInformacionTk.dominio}" />
+							<p:spacer width="30" />
+
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.vob']}" />
+							<p:spacer width="10" />
+							<p:outputLabel value="#{cValidarMIS.fInformacionTk.vob}" />
+							<p:spacer width="30" />
+
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['validar_mis.dialogValidar.aplicativo']}" />
+							<p:spacer width="10" />
+							<p:outputLabel value="#{cValidarMIS.fInformacionTk.codigoApp}" />
+							<p:spacer width="30" />
+						</h:panelGrid>
+					</p:fieldset>
+					<br />
+				</div>
+				<div align="center">
+					<p:commandButton id="btnCargarDocumentoTXT"
+						disabled="#{cValidarMIS.mostrar1}"
+						value="#{i18n['validator_mis.dialogValidar.adjuntarTxt']}"
+						actionListener="#{cValidarMIS.iniciarCargaDocumentoTXT()}"
+						update=":frmCargarDocumentoTXT :frmValidarTk" />
+					<p:tooltip for="btnCargarDocumentoTXT"
+						value="#{i18n['VALIDATOR.opcionCargar']}" />
+					
+					<p:spacer width="30" />
+					<p:commandButton id="btnCargarDocumentoMIS"
+						disabled="#{cValidarMIS.mostrar2}"
+						value="#{i18n['validator_mis.dialogValidar.adjuntarMis']}"
+						actionListener="#{cValidarMIS.iniciarCargaDocumento()}"
+						update=":frmCargarDocumentoMIS :frmValidarTk" />
+					<p:tooltip for="btnCargarDocumentoMIS"
+						value="#{i18n['VALIDATOR.opcionCargar']}" />
+						
+					<p:spacer width="30" />
+					<p:commandButton id="btnValidarDocumentoMIS"
+						disabled="#{cValidarMIS.mostrar3}"
+						value="Iniciar Validación"
+						actionListener="#{cValidarMIS.mostrarValidacionInformacion()}"
+						update=":frmValidarTk" />
+					<p:tooltip for="btnValidarDocumentoMIS"
+						value="#{i18n['VALIDATOR.opcionCargar']}" />
+					<br /> <br />
+				</div>
+				<br />
+				<p:tabView rendered="#{cValidarMIS.mostrar}">
+					<p:tab title="Validación inicial">
+						<div align="center">
+							<p:fieldset>
+								<br />
+								<br />
+								<p:fieldset
+									legend="#{i18n['validar_mis.dialogValidar.fieldInformacionMis']}">
+									<h:panelGrid columns="12">
+										<p:outputLabel styleClass="miEstiloEtiqueta"
+											value="#{i18n['validar_mis.dialogValidar.tk']}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarTk}" />
+										<p:spacer width="10"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarTk}" />
+										<p:outputLabel
+											value="#{cValidarMIS.fArchivoMISHandler.fDatosMis.tkMis}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarTk}" />
+										<p:spacer width="30"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarTk}" />
+
+										<p:outputLabel styleClass="miEstiloEtiqueta"
+											value="#{i18n['validar_mis.dialogValidar.solNegocio']}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSn}" />
+										<p:spacer width="10"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSn}" />
+										<p:outputLabel
+											value="#{cValidarMIS.fArchivoMISHandler.fDatosMis.snMIS}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSn}" />
+										<p:spacer width="30"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSn}" />
+
+										<p:outputLabel styleClass="miEstiloEtiqueta"
+											value="#{i18n['validar_mis.dialogValidar.solTecnico']}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSt}" />
+										<p:spacer width="10"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSt}" />
+										<p:outputLabel
+											value="#{cValidarMIS.fArchivoMISHandler.fDatosMis.stMIS}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSt}" />
+										<p:spacer width="30"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSt}" />
+
+										<p:outputLabel styleClass="miEstiloEtiqueta"
+											value="#{i18n['validar_mis.dialogValidar.solServicio']}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSs}" />
+										<p:spacer width="10"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSs}" />
+										<p:outputLabel
+											value="#{cValidarMIS.fArchivoMISHandler.fDatosMis.ssMIS}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSs}" />
+										<p:spacer width="30"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarSs}" />
+
+										<p:outputLabel styleClass="miEstiloEtiqueta"
+											value="#{i18n['validar_mis.dialogValidar.aplicativo']}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarCodMis}" />
+										<p:spacer width="10"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarCodMis}" />
+										<p:outputLabel
+											value="#{cValidarMIS.fArchivoMISHandler.fDatosMis.codMIS}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarCodMis}" />
+										<p:spacer width="30"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarCodMis}" />
+
+										<p:outputLabel styleClass="miEstiloEtiqueta"
+											value="#{i18n['validar_mis.dialogValidar.tipoCambio']}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarTipoCambio}" />
+										<p:spacer width="10"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarTipoCambio}" />
+										<p:outputLabel
+											value="#{cValidarMIS.fArchivoMISHandler.fDatosMis.tipoCambio}"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarTipoCambio}" />
+										<p:spacer width="30"
+											rendered="#{cValidarMIS.fArchivoMISHandler.fDatosMis.mostrarTipoCambio}" />
+									</h:panelGrid>
+								</p:fieldset>
+								<br />
+								<br />
+								<center>
+									<br />
+									<p:dataTable id="tblValidacion" widgetVar="wgvValidacion"
+										value="#{cValidarMIS.fArchivoMISHandler.fDatosMis.listaValidacion}"
+										var="Val"
+										currentPageReportTemplate="{currentPage} de {totalPages}"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 			{NextPageLink} {LastPageLink}"
+										paginator="true" rows="5" paginatorPosition="bottom"
+										emptyMessage="#{i18n['validar_mis.tablaAplicativoVacia']}">
+
+										<p:column headerText="Validacion"
+											style="width:200px; text-align: center;">
+											<h:outputText value="#{Val.validacion}" />
+										</p:column>
+
+										<p:column headerText="Estado"
+											style="width:200px; text-align: center;">
+											<h:outputText value="#{Val.estado}" />
+										</p:column>
+
+										<p:column headerText="Comentario"
+											style="width:200px; text-align: center;">
+											<h:outputText value="#{Val.comentario}" />
+										</p:column>
+									</p:dataTable>
+									<br />
+								</center>
+							</p:fieldset>
+						</div>
+					</p:tab>
+					<p:tab title="Validación de servidores">
+						<div align="center">
+							<h:panelGrid columns="5">
+								<h:panelGrid>
+									<p:outputLabel styleClass="miEstiloEtiqueta"
+										value="#{i18n['validar_mis.dialogValidar.servidorProduccion']}" />
+									<p:inputTextarea
+										value="#{cValidarMIS.fArchivoMISHandler.fDatosServidor.produccion}"
+										readonly="true" maxlength="200" rows="10" cols="30" />
+								</h:panelGrid>
+								<p:spacer width="30" />
+								<p:spacer width="30" />
+								<p:spacer width="30" />
+								<h:panelGrid>
+									<p:outputLabel styleClass="miEstiloEtiqueta"
+										value="#{i18n['validar_mis.dialogValidar.servidorCertificacion']}" />
+									<p:inputTextarea
+										value="#{cValidarMIS.fArchivoMISHandler.fDatosServidor.certificacion}"
+										readonly="true" maxlength="200" rows="10" cols="30" />
+								</h:panelGrid>
+							</h:panelGrid>
+							<br /> <br />
+							<p:dataTable id="tblServidorValidacion" widgetVar="wgvServidorValidacion"
+								value="#{cValidarMIS.fArchivoMISHandler.fDatosServidor.listaValidacion}"
+								var="Vali">
+
+								<p:column headerText="Validacion" style="width:350px; text-align: center;">
+									<h:outputText value="#{Vali.validacion}" />
+								</p:column>
+								<p:column headerText="Estado" style="width:100px; text-align: center;">
+									<h:outputText value="#{Vali.estado}" />
+								</p:column>
+
+								<p:column headerText="Comentario" style="width:250px; text-align: center;">
+									<h:outputText value="#{Vali.comentario}" />
+								</p:column>
+
+							</p:dataTable>
+
+						</div>
+					</p:tab>
+					<p:tab title="Validación de Configuración de servidores">
+						<p:scrollPanel mode="native" style="height:450px">
+							<div align="center">
+								<p:fieldset>
+
+									<br />
+									<p:fieldset
+										legend="#{i18n['validar_mis.dialogValidar.informacionGeneral']}">
+										<center>
+											<br />
+											<p:dataTable id="tblInformacionG" widgetVar="wgvInformacionG"
+												value="#{cValidarMIS.fArchivoMISHandler.fDatosConfiguracion.listaValidacion}"
+												var="Val1">
+
+												<p:column headerText="Validacion"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Val1.validacion}" />
+												</p:column>
+												<p:column headerText="Estado"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Val1.estado}" />
+												</p:column>
+
+												<p:column headerText="Comentario"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Val1.comentario}" />
+												</p:column>
+											</p:dataTable>
+											<br />
+										</center>
+									</p:fieldset>
+									<br />
+
+									<p:fieldset
+										legend="#{i18n['validar_mis.dialogValidar.secciones']}">
+										<center>
+											<br />
+											<p:dataTable id="tblSecciones" widgetVar="wgvSecciones"
+												value="#{cValidarMIS.fArchivoMISHandler.fDatosConfiguracion.listaSeccionConfiguracion}"
+												var="Val2">
+
+												<p:column headerText="idSeccion"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Val2.idSubSeccion}" />
+												</p:column>
+
+												<p:column headerText="Tarea"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Val2.tarea}" />
+												</p:column>
+
+												<p:column headerText="Subtarea"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Val2.subTarea}" />
+												</p:column>
+											</p:dataTable>
+											<br />
+										</center>
+									</p:fieldset>
+									<br />
+
+									<p:fieldset
+										legend="#{i18n['validar_mis.dialogValidar.informacionEspecifica']}">
+										<center>
+											<br />
+											<p:dataTable id="tblInformacionE" widgetVar="wgvInformacionE"
+												value="#{cValidarMIS.fArchivoMISHandler.fDatosConfiguracion.listaValidacion2}"
+												var="Val3">
+
+												<p:column headerText="Validacion"
+													style="width:350px; text-align: center;">
+													<h:outputText value="#{Val3.validacion}" />
+												</p:column>
+												<p:column headerText="Estado"
+													style="width:100px; text-align: center;">
+													<h:outputText value="#{Val3.estado}" />
+												</p:column>
+
+												<p:column headerText="Comentario"
+													style="width:250px; text-align: center;">
+													<h:outputText value="#{Val3.comentario}" />
+												</p:column>
+
+												<p:column headerText="Detalle"
+													style="width:100px; text-align: center;">
+													<div align="center">
+														<p:commandButton id="btnConsulta"
+															disabled="#{Val3.comentarioAdicional eq null}"
+															icon="ui-icon-circle-triangle-n"
+															actionListener="#{cValidarMIS.consultarInformacionRutas(Val3)}"
+															update=":frmRutasNoExistentes">
+														</p:commandButton>
+														<p:tooltip for="btnConsulta"
+															value="#{i18n['VALIDATOR.opcionConsultar']}" />
+													</div>
+												</p:column>
+											</p:dataTable>
+											<br />
+										</center>
+									</p:fieldset>
+								</p:fieldset>
+							</div>
+						</p:scrollPanel>
+					</p:tab>
+					<p:tab title="Validación de Reversión">
+						<p:scrollPanel mode="native" style="height:450px">
+							<div align="center">
+								<p:fieldset>
+
+									<br />
+									<p:fieldset
+										legend="#{i18n['validar_mis.dialogValidar.informacionGeneral']}">
+										<center>
+											<br />
+											<p:dataTable id="tblInformacionGR" widgetVar="wgvInformacionGR"
+												value="#{cValidarMIS.fArchivoMISHandler.fDatosReversion.listaValidacion1}"
+												var="Valx">
+
+												<p:column headerText="Validacion"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Valx.validacion}" />
+												</p:column>
+												<p:column headerText="Estado"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Valx.estado}" />
+												</p:column>
+
+												<p:column headerText="Comentario"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Valx.comentario}" />
+												</p:column>
+											</p:dataTable>
+											<br />
+										</center>
+									</p:fieldset>
+									<br />
+
+									<p:fieldset
+										legend="#{i18n['validar_mis.dialogValidar.secciones']}">
+										<center>
+											<br />
+											<p:dataTable id="tblSeccionesR" widgetVar="wgvSeccionesR"
+												value="#{cValidarMIS.fArchivoMISHandler.fDatosReversion.listaFSubSeccionReversionF}"
+												var="Valy">
+
+												<p:column headerText="idSeccion"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Valy.idSubSeccion}" />
+												</p:column>
+
+												<p:column headerText="Tarea"
+													style="width:200px; text-align: center;">
+													<h:outputText value="#{Valy.tarea}" />
+												</p:column>
+
+											</p:dataTable>
+											<br />
+										</center>
+									</p:fieldset>
+									<br />
+
+									<p:fieldset
+										legend="#{i18n['validar_mis.dialogValidar.informacionEspecifica']}">
+										<center>
+											<br />
+											<p:dataTable id="tblInformacionR" widgetVar="wgvInformacionR"
+												value="#{cValidarMIS.fArchivoMISHandler.fDatosReversion.listaValidacion2}"
+												var="Valz">
+
+												<p:column headerText="Validacion"
+													style="width:350px; text-align: center;">
+													<h:outputText value="#{Valz.validacion}" />
+												</p:column>
+												<p:column headerText="Estado"
+													style="width:100px; text-align: center;">
+													<h:outputText value="#{Valz.estado}" />
+												</p:column>
+
+												<p:column headerText="Comentario"
+													style="width:250px; text-align: center;">
+													<h:outputText value="#{Valz.comentario}" />
+												</p:column>
+
+												<p:column headerText="Detalle"
+													style="width:100px; text-align: center;">
+													<div align="center">
+														<p:commandButton id="btnConsultaR"
+															disabled="#{Valz.comentarioAdicional eq null}"
+															icon="ui-icon-circle-triangle-n"
+															actionListener="#{cValidarMIS.consultarInformacionRutasR(Valz)}"
+															update=":frmRutasNoExistentesR">
+														</p:commandButton>
+														<p:tooltip for="btnConsultaR"
+															value="#{i18n['VALIDATOR.opcionConsultar']}" />
+													</div>
+												</p:column>
+											</p:dataTable>
+											<br />
+										</center>
+									</p:fieldset>
+								</p:fieldset>
+							</div>
+						</p:scrollPanel>
+					</p:tab>
+				</p:tabView>
+			</h:form>
+		</p:dialog>
+		
+		<!-- 	Cargar documento MIS -->
+		<p:dialog header="Cargar Documento MIS"
+			widgetVar="wgvCargarDocumentoMIS" appendTo="@(body)"
+			id="dlgCargarDocumentoMIS" modal="true" resizable="false"
+			draggable="false" showEffect="fade" hideEffect="fade">
+
+			<h:form id="frmCargarDocumentoMIS" enctype="multipart/form-data">
+				<p:panelGrid columns="3">
+					<p:outputLabel for="upfDocumentoMIS" styleClass="miEstiloEtiqueta"
+						value="Documento" />
+					<p:spacer width="10" />
+					<p:fileUpload id="upfDocumentoMIS" mode="advanced"
+						fileUploadListener="#{cValidarMIS.fArchivoMISHandler.cargarArchivoMIS}"
+						label="#{i18n['VALIDATOR.documento']}"
+						uploadLabel="#{i18n['VALIDATOR.opcionCargar']}"
+						cancelLabel="#{i18n['VALIDATOR.opcionCancelar']}" fileLimit="1"
+						fileLimitMessage="#{i18n['VALIDATOR.limiteArchivosNoValido']}"
+						allowTypes="/(\.|\/)(xml)$/"
+						invalidFileMessage="#{i18n['VALIDATOR.tipoArchivoNoValido']}"
+						sizeLimit="2621440000000"
+						invalidSizeMessage="#{i18n['VALIDATOR.tamanioArchivoNoValido']}" />
+				</p:panelGrid>
+
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cValidarMIS.convertirArchivo()}"
+						update=":frmValidarTk :frmCargarDocumentoMIS"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvCargarDocumentoMIS').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<!-- 	Cargar documento TXT -->
+		<p:dialog header="Cargar Documento Rutas ClearCase"
+			widgetVar="wgvCargarDocumentoTXT" appendTo="@(body)"
+			id="dlgCargarDocumentoTXT" modal="true" resizable="false"
+			draggable="false" showEffect="fade" hideEffect="fade">
+
+			<h:form id="frmCargarDocumentoTXT" enctype="multipart/form-data">
+				<p:panelGrid columns="3">
+					<p:outputLabel for="upfDocumentoTXT" styleClass="miEstiloEtiqueta"
+						value="Documento" />
+					<p:spacer width="10" />
+					<p:fileUpload id="upfDocumentoTXT" mode="advanced"
+						fileUploadListener="#{cValidarMIS.fArchivoMISHandler.cargarArchivoTXT}"
+						label="#{i18n['VALIDATOR.documento']}"
+						uploadLabel="#{i18n['VALIDATOR.opcionCargar']}"
+						cancelLabel="#{i18n['VALIDATOR.opcionCancelar']}" fileLimit="1"
+						fileLimitMessage="#{i18n['VALIDATOR.limiteArchivosNoValido']}"
+						allowTypes="/(\.|\/)(txt)$/"
+						invalidFileMessage="#{i18n['VALIDATOR.tipoArchivoNoValido']}"
+						sizeLimit="2621440000000"
+						invalidSizeMessage="#{i18n['VALIDATOR.tamanioArchivoNoValido']}" />
+				</p:panelGrid>
+
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cValidarMIS.convertirArchivoTXT()}"
+						update=":frmValidarTk :frmCargarDocumentoTXT"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvCargarDocumentoTXT').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- DIALOG RUTAS CLEARCASE -->
+		<p:dialog header="Rutas no existentes dentro del ClearCase']}"
+			widgetVar="wgvRutasNoExistentes" appendTo="@(body)"
+			id="dlgRutasNoExistentes" modal="true" resizable="false" width="55%"
+			draggable="false" showEffect="fade" hideEffect="fade">
+
+			<h:form id="frmRutasNoExistentes">
+				<br />
+				<p:dataTable id="tblSecciones" widgetVar="wgvSecciones"
+					value="#{cValidarMIS.listaRutasNoClearCase}" var="Val0">
+					<p:column headerText="Nombre de Rutas"
+						style="width:500px; text-align: center;">
+						<h:outputText value="#{Val0}" />
+					</p:column>
+				</p:dataTable>
+				<br />
+			</h:form>
+		</p:dialog>
+		
+		<!-- DIALOG RUTAS CLEARCASE REVERSION-->
+		<p:dialog header="Rutas no existentes dentro del ClearCase']}"
+			widgetVar="wgvRutasNoExistentesR" appendTo="@(body)"
+			id="dlgRutasNoExistentesR" modal="true" resizable="false" width="55%"
+			draggable="false" showEffect="fade" hideEffect="fade">
+
+			<h:form id="frmRutasNoExistentesR">
+				<br />
+				<p:dataTable id="tblSecciones" widgetVar="wgvSecciones"
+					value="#{cValidarMIS.listaRutasNoClearCase}" var="Val0">
+					<p:column headerText="Nombre de Rutas"
+						style="width:500px; text-align: center;">
+						<h:outputText value="#{Val0}" />
+					</p:column>
+				</p:dataTable>
+				<br />
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

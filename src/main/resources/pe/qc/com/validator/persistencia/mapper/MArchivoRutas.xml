@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MArchivoRutas"> <!-- interface java -->
+
+	<resultMap id="bArchivoRutas"
+		type="pe.qc.com.validator.persistencia.entity.BArchivoRutas">
+		<id column="id_validator_rutas" property="idValidatorRutas" />
+		<result column="servidor_validator_rutas" property="servidorValidatorRutas" />
+		<result column="ruta_validator_rutas" property="rutaValidatorRutas" />
+		<result column="fecha_registro" property="fechaRegistro" />
+	</resultMap>
+
+</mapper>

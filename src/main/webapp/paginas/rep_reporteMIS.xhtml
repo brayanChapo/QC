@@ -1,0 +1,195 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmReporteMIS">
+			<p:growl id="mensajes" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['reporte_mis.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+
+			<div align="center">
+				<h:panelGrid width="90%">
+					<h:panelGrid columns="10">
+						<p:spacer width="10" />
+						<p:outputLabel for="txtFechaInicio" styleClass="miEstiloEtiqueta"
+							value="#{i18n['reporte_mis.fechaInicio']}" />
+						<p:spacer width="10" />
+						<p:calendar id="txtFechaInicio" value="#{cReporteMIS.fechaInicio}"
+							mode="popup">
+							<p:ajax event="dateSelect"
+									update="txtFechaFin" />
+						</p:calendar>
+						<p:spacer width="10" />
+						<p:outputLabel for="txtFechaFin" styleClass="miEstiloEtiqueta"
+							value="#{i18n['reporte_mis.fechaFin']}" />
+						<p:spacer width="10" />
+						<p:calendar id="txtFechaFin" value="#{cReporteMIS.fechaFin}"
+							mode="popup"  mindate="#{cReporteMIS.fechaInicio}"/>
+						<p:spacer width="10" />
+						<p:commandButton id="btnBuscar" icon="ui-icon-search"
+							actionListener="#{cReporteMIS.buscarSolicitud()}"
+							update=":frmReporteMIS">
+						</p:commandButton>
+					</h:panelGrid>
+					<br />
+					<center>
+						<br />
+						<p:dataTable id="tblreporteMIS" widgetVar="wgvreporteMIS"
+							value="#{cReporteMIS.listaSolicitudFecha}" var="reporteMIS"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="15" paginatorPosition="bottom"
+							emptyMessage="#{i18n['reporte_mis.tablaVacia']}">
+
+							<p:column headerText="#{i18n['reporte_mis.tk']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{reporteMIS.nombreVob}" filterStyle="width:200px;">
+								<h:outputText value="#{reporteMIS.tkSolicitud}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_mis.crq']}">
+								<h:outputText value="#{reporteMIS.crqSolicitud}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_mis.dominio']}">
+								<h:outputText value="#{reporteMIS.nombreDominio}" />
+							</p:column>
+
+							<p:column style="width:300px; text-align: center;"
+								headerText="#{i18n['reporte_mis.nombreUsuario']}">
+								<h:outputText value="#{reporteMIS.nombreUsuario}" />
+							</p:column>
+
+							<p:column style="width:200px; text-align: center;"
+								headerText="#{i18n['reporte_mis.fecha']}">
+								<h:outputText value="#{reporteMIS.fechaSolicitud}">
+									<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss"
+										timeZone="America/Lima" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{i18n['reporte_mis.visualizar']}"
+								style="width:150px; text-align: center;">
+								<div align="center">
+									<p:commandButton id="btnConsultar" icon="ui-icon-search"
+										actionListener="#{cReporteMIS.visualizarReporte(reporteMIS)}"
+										update=":frmConsultarReporteMIS">
+									</p:commandButton>
+									<p:tooltip for="btnConsultar"
+										value="#{i18n['VALIDATOR.opcionConsultar']}" />
+								</div>
+							</p:column>
+							
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+		
+		<!--MODAL Historico Reporte-->
+		<p:dialog header="#{i18n['reporte_mis.historicoReporte']}"
+			widgetVar="wgvHistoricoReporte" appendTo="@(body)"
+			id="dlgHistoricoReporte" modal="true" resizable="false" width="55%"
+			draggable="false" showEffect="fade" hideEffect="fade">
+			<h:form id="frmConsultarReporteMIS">
+				<br />
+				<br />
+				<p:dataTable id="tblHistoricoReporte" widgetVar="wgvHistoricoReporteTable"
+					value="#{cReporteMIS.listaArchivoMIS}" var="historicoReporte"
+					emptyMessage="#{i18n['reporte_mis.tablaVaciaHistorico']}">
+					
+					<p:column headerText="N°" style="width:50px; text-align: center;">
+							#{cReporteMIS.listaArchivoMIS.indexOf(historicoReporte)+1}
+					</p:column>
+
+					<p:column headerText="#{i18n['reporte_mis.numeroTK']}"
+						style="width:200px; text-align: center;">
+						<h:outputText value="#{historicoReporte.tkMIS}" />
+					</p:column>
+
+					<p:column headerText="#{i18n['reporte_mis.porcentaje']}"
+						style="width:200px; text-align: center;">
+						<h:outputText value="#{historicoReporte.porcValMIS}" />
+					</p:column>
+
+					<p:column headerText="#{i18n['reporte_mis.fechaRegistrada']}"
+						style="width:200px; text-align: center;">
+						<h:outputText value="#{historicoReporte.fechaMIS}">
+							<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss" timeZone="America/Lima" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{i18n['reporte_mis.visaulizarReporte']}" style="width:8%">
+						<div align="center">
+							<p:commandButton id="btnReporteHistorico" icon="ui-icon-search"
+								actionListener="#{cReporteMIS.verReporte(historicoReporte)}"
+								update=":frmConsultarReporteMIS :frmHistoricoMis" />
+							<p:tooltip for="btnReporteHistorico"
+								value="#{i18n['reporte_mis.visualizar']}" />
+						</div>
+					</p:column>	
+						
+				</p:dataTable>
+				<br />
+				<br />
+			</h:form>
+		</p:dialog>
+		
+		<!-- DIALOG REPORTE MIS-->
+		<p:dialog header="Reporte Mis" widgetVar="wgvReporteMIS"
+			appendTo="@(body)" id="dlgReporteMIS" modal="true" resizable="false"
+			width="55%" draggable="false" showEffect="fade" hideEffect="fade">
+			<h:form id="frmHistoricoMis">
+				<br />
+				<div align="center">
+					<h:panelGrid columns="11">
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_mis.cantidadTotal']}" />
+						<p:spacer width="10" />
+						<p:outputLabel
+							value="#{cReporteMIS.boArchivoMISReporte.cantValTotalMIS}" />
+						<p:spacer width="30" />
+	
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_mis.cantidadCorrectas']}" />
+						<p:spacer width="10" />
+						<p:outputLabel
+							value="#{cReporteMIS.boArchivoMISReporte.cantValCorrMIS}" />
+						<p:spacer width="30" />
+	
+						<p:outputLabel styleClass="miEstiloEtiqueta"
+							value="#{i18n['revisar_mis.cantidadIncorrectas']}" />
+						<p:spacer width="10" />
+						<p:outputLabel
+							value="#{cReporteMIS.boArchivoMISReporte.cantValIncMIS}" />
+					</h:panelGrid>
+				</div>
+				<br />
+				<div align="center">
+					<h:panelGrid columns="3">
+						<p:pieChart value="#{cReporteMIS.fReporte.pieModel1}" legendPosition="w" style="width:400px;height:300px;"/>
+						<p:spacer width="10" />
+						<p:pieChart value="#{cReporteMIS.fReporte.pieModel1}" legendPosition="e" sliceMargin="5" diameter="150" fill="false" showDataLabels="true" style="width:400px;height:300px;" styleClass="miEstiloPieChart2"/>
+					</h:panelGrid>
+				</div>
+				<br />
+			</h:form>
+		</p:dialog>
+		
+		
+	</ui:define>
+</ui:composition>

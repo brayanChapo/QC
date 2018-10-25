@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pe.qc.com.validator.persistencia.mapper.MArchivoMIS"> <!-- interface java -->
+
+	<resultMap id="bArchivoMIS"
+		type="pe.qc.com.validator.persistencia.entity.BArchivoMIS">
+		<id column="id_MIS" property="idArchivoMIS" />
+		<result column="val_id_MIS" property="idHistoricoMIS" />
+		<result column="cant_val_tot_MIS" property="cantValTotalMIS" />
+		<result column="cant_val_corr_MIS" property="cantValCorrMIS" />
+		<result column="cant_val_inco_MIS" property="cantValIncMIS" />
+		<result column="porc_val_MIS" property="porcValMIS" />
+		<result column="esHistorico_MIS" property="esHistorico" />
+		<result column="fecha_MIS" property="fechaMIS" />
+		<result column="tk_MIS" property="tkMIS" />
+	</resultMap>
+
+</mapper>

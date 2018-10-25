@@ -1,0 +1,231 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmConsultarCmdb">
+			<p:growl id="mensajeCmdb" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['consultar_Servidores.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<div align="center">
+				<h:panelGrid width="70%">
+					<br />
+					<center>
+						<br />
+						<p:dataTable id="tblRelacion" widgetVar="wgvRelacion"
+							value="#{cConsultarServidores.listarRelacion}" var="Relacion"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="15"
+							paginatorPosition="bottom"
+							emptyMessage="#{i18n['consultar_Servidores.tablaVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cConsultarServidores.listarRelacion.indexOf(Relacion)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['consultar_Servidores.nombreServidor']}"
+								style="width:150px; text-align: center;"
+								filterBy="#{Relacion.nombreServidor}" filterStyle="width:250px;">
+								<h:outputText value="#{Relacion.nombreServidor}" />
+							</p:column>
+
+							<p:column style="width:300px; text-align: center;"
+								headerText="#{i18n['consultar_Servidores.nombreCodigo']}">
+								<h:outputText value="#{Relacion.nombreCodigoApp}" />
+							</p:column>
+							
+							<p:column style="width:300px; text-align: center;"
+								headerText="#{i18n['consultar_Servidores.nombreAmbiente']}">
+								<h:outputText value="#{Relacion.nombreAmbiente}" />
+							</p:column>
+							
+							<p:column style="width:300px;"
+								headerText="#{i18n['consultar_Servidores.opcion']}">
+								<div align="center">
+									<p:commandButton id="btnConsultarRelacion" icon="ui-icon-pencil"
+									actionListener="#{cConsultarServidores.iniciarConsultarServidor(Relacion)}"
+									update=":frmDetalleServidor">
+									</p:commandButton>
+									<p:tooltip for="btnConsultarRelacion"
+										value="#{i18n['VALIDATOR.opcionConsultar']}" />
+								</div>
+							</p:column>
+
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+		
+		<p:dialog header="#{i18n['consultar_Servidores.dialogDetalleCabecera']}"
+			widgetVar="wgvDetalleServidor" appendTo="@(body)" modal="true"
+			position="top" showEffect="fade" hideEffect="fade" resizable="false"
+			width="80%" draggable="false">
+			<h:form id="frmDetalleServidor">
+				<br />
+				<div align="center">
+					<p:fieldset	legend="#{i18n['consultar_Servidores.dialogDetalleInformacionGeneral']}">
+						<h:panelGrid columns="12">
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['consultar_Servidores.dialogDetalleInformacionGeneralHostname']}" />
+							<p:spacer width="10" />
+							<p:outputLabel
+								value="#{cConsultarServidores.boServidor.hostnameServidor}" />
+							<p:spacer width="30" />
+							
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['consultar_Servidores.dialogDetalleInformacionGeneralCategoriaServidor']}" />
+							<p:spacer width="10" />
+							<p:outputLabel
+								value="#{cConsultarServidores.boServidor.categoriaServidor}" />
+							<p:spacer width="30" />
+							
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['consultar_Servidores.dialogDetalleInformacionGeneralMemoriaFisica']}" />
+							<p:spacer width="10" />
+							<p:outputLabel
+								value="#{cConsultarServidores.boServidor.memoriaFisica}" />
+							<p:spacer width="30" />
+							
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['consultar_Servidores.dialogDetalleInformacionGeneralDescripcionServidor']}" />
+							<p:spacer width="10" />
+							<p:outputLabel
+								value="#{cConsultarServidores.boServidor.descripcionServidor}" />
+							<p:spacer width="30" />
+							
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['consultar_Servidores.dialogDetalleInformacionGeneralFabrincateServidor']}" />
+							<p:spacer width="10" />
+							<p:outputLabel
+								value="#{cConsultarServidores.boServidor.fabricanteServidor}" />
+							<p:spacer width="30" />
+							
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['consultar_Servidores.dialogDetalleInformacionGeneralEstadoPlataforma']}" />
+							<p:spacer width="10" />
+							<p:outputLabel
+								value="#{cConsultarServidores.boServidor.estadoPlataforma}" />
+							<p:spacer width="30" />
+							
+							<p:outputLabel styleClass="miEstiloEtiqueta"
+								value="#{i18n['consultar_Servidores.dialogDetalleInformacionGeneralEstadoCmdb']}" />
+							<p:spacer width="10" />
+							<p:outputLabel
+								value="#{cConsultarServidores.boServidor.estadoCmdb eq 1 ? 'ACTIVO' : 'INACTIVO'}" />
+							<p:spacer width="30" />
+			
+						</h:panelGrid>
+					</p:fieldset>
+					<br />
+					<p:fieldset	legend="#{i18n['consultar_Servidores.dialogDetalleSistemaOperativo']}">
+						<p:dataTable id="tblSOServidor" widgetVar="wgvSOServidor"
+							value="#{cConsultarServidores.listarSOServidor}"
+							var="SO" emptyMessage="Tabla Vacia">
+							
+							<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleSistemaOperativoProveedor']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{SO.fabricante}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleSistemaOperativoSO']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{SO.tipoSO}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleSistemaOperativoNombreDetallado']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{SO.nombreDetallado}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleSistemaOperativoEstado']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{SO.estado eq 1 ? 'ACTIVO' : 'INACTIVO'}" />
+							</p:column>
+							
+							
+						</p:dataTable>				
+					</p:fieldset>
+					
+					<br />
+					<p:fieldset	legend="#{i18n['consultar_Servidores.dialogDetalleIPServidor']}">
+						<p:dataTable id="tblIPServidor" widgetVar="wgvIPServidor"
+							value="#{cConsultarServidores.listarIPServidor}"
+							var="IP" emptyMessage="Tabla Vacia">	
+							
+							<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleIPServidorCategoria']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{IP.categoria}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleIPServidorItem']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{IP.item}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleIPServidorIP']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{IP.iP}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleIPServidorDescripcionDetallada']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{IP.ipDetalle}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleIPServidorEstado']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{IP.estado eq 1 ? 'ACTIVO' : 'INACTIVO'}" />
+							</p:column>
+							
+						</p:dataTable>				
+					</p:fieldset>
+					
+					<br />
+					<p:fieldset	legend="#{i18n['consultar_Servidores.dialogDetalleUnidades']}">
+						<p:scrollPanel mode="native" style="height:250px">
+							
+							<p:dataTable id="tblUnidades" widgetVar="wgvUnidades"
+								value="#{cConsultarServidores.listarUnidades}"
+								var="Unidades" emptyMessage="Tabla Vacia">	
+								
+								<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleUnidadesNombre']}"
+									style="width:200px; text-align: center;">
+									<h:outputText value="#{Unidades.nombreUnidad}" />
+								</p:column>
+								
+								<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleUnidadesCapacidadTotal']}"
+									style="width:200px; text-align: center;">
+									<h:outputText value="#{Unidades.capacidadTotal}" />
+								</p:column>
+								
+								<p:column headerText="#{i18n['consultar_Servidores.dialogDetalleUnidadesCapacidadDisponible']}"
+									style="width:200px; text-align: center;">
+									<h:outputText value="#{Unidades.capacidadDisponible}" />
+								</p:column>
+
+							</p:dataTable>		
+						</p:scrollPanel>
+								
+					</p:fieldset>
+					
+				</div>
+			
+			</h:form>
+			
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

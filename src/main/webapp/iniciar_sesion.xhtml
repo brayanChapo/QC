@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>QCVALIDATOR</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta http-equiv="Content-Language" content="es" />
+	<meta name="robots" content="index,follow" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta http-equiv="expires" content="0" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{request.contextPath}/recursos/img/plantillaBN/logo1.png" />
+
+	<link rel="stylesheet" type="text/css"
+		href="recursos/css/resetearcss.css" />
+	<link rel="stylesheet" type="text/css"
+		href="recursos/css/login-principal.css" />
+	<link rel="stylesheet" type="text/css" href="recursos/css/login.css" />
+	<link rel="stylesheet" type="text/css"
+		href="recursos/css/tipografias.css" />
+</h:head>
+<h:body>
+	<div id="bn-contenidos" style="width: 1123px; height: 670px;">
+		<div id="cabecera1" style="width: 1123px; height: 120px;">
+			<img src="recursos/img/plantillaBN/logo1.png"
+				style="height: 100px; width: 250px" align="right" /> 
+<!-- 			<img src="recursos/img/plantillaBN/Logo2.png" -->
+<!-- 				style="height: 100px; width: 250px;" align="left" /> -->
+		</div>
+
+		<div id="cuerpo1"
+			style="width: 1123px; height: 550px; background: #f0f0f0;">
+			<div style="width: 1123px; height: 50px;"></div>
+			<h:panelGrid columns="3">
+				<h:panelGrid>
+					<img src="recursos/img/plantillaBN/everis-imagen.jpg"
+						style="width: 455px; height: 407px; margin-left: 50px ; position: static;" />
+				</h:panelGrid>
+
+				<p:spacer width="100" />
+
+				<h:panelGrid>
+					<p:outputLabel value="#{cLogin.estaLogeado()}" style="display:none"></p:outputLabel>
+					<h:form id="loginForm" prependId="false">
+						<div align="center" style="background: #444444; height: 50px;">
+							<h1 style="color: #ffffff">Acceso al Sistema</h1>
+						</div>
+						
+						<div id="etiquetas">
+							<p:messages id="messages" showDetail="false" closable="true"
+								showSummary="true" />
+						
+						<br />
+						<div align="center">
+							<h:panelGrid columns="3">
+								<h:outputLabel for="j_username" value="Usuario:"
+									styleClass="grande" />
+								<p:spacer width="10" />
+								<p:inputText id="j_username" value="#{cLogin.fLogin.usuario}"
+									required="true" label="username" styleClass="grande"
+									maxlength="6" requiredMessage="Ingrese un usuario"
+									validatorMessage="El dato ingresado para el 'Usuario' no es correcto, ingrese solo números y letras">
+									<f:validateRegex
+										pattern="(([0-9]|[A-Z]|[a-z]|á|é|í|ó|ú|ñ|Ñ|Á|É|Í|Ó|Ú)*)" />
+								</p:inputText>
+
+								<h:outputLabel for="j_password" value="Contrase&ntilde;a:" />
+								<p:spacer width="10" />
+								<p:password id="j_password" value="#{cLogin.fLogin.clave}"
+									requiredMessage="Ingrese una contrase&ntilde;a" maxlength="10"
+									required="true" label="password" styleClass="grande" />
+							</h:panelGrid>
+						</div>
+						</div>
+						<br />
+						<div align="center">
+							<p:commandButton id="btnLogin" value="Ingresar"
+								validateClient="true" styleClass="commandButton"
+								update="loginForm" actionListener="#{cLogin.iniciarSesion}" >
+							</p:commandButton>
+						</div>
+
+						<div id="contacto1" class="generar-clave-chica1">
+							<img src="recursos/img/plantillaBN/chica.png" />
+							<div class="generar-clave-contenido1">
+								<p>
+									Si no recuerda su contrase&ntilde;a, comuniquese al anexo: <span>169-173</span>
+								</p>
+								<p>
+									o env&iacute;e un correo a <span>qc.everis.peru@everis.com</span>
+								</p>
+
+							</div>
+						</div>
+					</h:form>
+
+
+
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+
+	</div>
+	<div id="pie-pagina">Everis- Peru SAC &copy;, Lima - Per&uacute;
+		2018, Todos los derechos reservados</div>
+</h:body>
+
+</html>

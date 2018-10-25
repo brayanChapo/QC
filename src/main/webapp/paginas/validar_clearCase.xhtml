@@ -1,0 +1,172 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+		<h:form id="frmValidarClearCase">
+			<p:growl id="mensajes" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['validar_clearCase.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<br />
+			<br />
+			<br />
+			<div align="center">
+				<h:panelGrid columns="7">
+					<p:outputLabel for="tkCc" styleClass="miEstiloEtiqueta"
+						value="#{i18n['validar_clearCase.tk']}" />
+
+					<p:spacer width="10" />
+
+					<p:inputText id="tkCc" required="true" size="52" maxlength="40" value="#{cValidarClearCase.nombreTk}">
+						<p:ajax event="keypress" update="VobCc" listener="#{cValidarClearCase.buscarTK()}"/>
+					</p:inputText>
+
+					<p:spacer width="10" />
+
+					<p:outputLabel for="VobCc" styleClass="miEstiloEtiqueta"
+						value="#{i18n['validar_clearCase.vob']}" />
+
+					<p:spacer width="10" />
+
+					<p:inputText id="VobCc" required="true" size="52" maxlength="40" value="#{cValidarClearCase.nombreVob}"/>
+				</h:panelGrid>
+			</div>
+			<br />
+			<br />
+			<br />
+			<div align="center">
+				<h:panelGrid width="90%">
+					<center>
+						<p:dataTable id="tblClearCase" widgetVar="wgvClearCase" value="#{cValidarClearCase.boValidacionClearCase.listabClearCase}"
+							 var="ClearCase">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cValidarClearCase.boValidacionClearCase.listabClearCase.indexOf(ClearCase)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['validar_clearCase.elemento']}"
+								style="width:150px; text-align: center;">
+								<h:outputText value="#{ClearCase.elemento}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['validar_clearCase.carpeta']}"
+								style="width:100px; text-align: center;">
+								<h:outputText value="#{ClearCase.carpeta}"/>
+							</p:column>
+							
+							<p:column headerText="#{i18n['validar_clearCase.ruta']}"
+								style="width:250px; text-align: center;">
+								<h:outputText value="#{ClearCase.ruta}"/>
+							</p:column>
+
+<!-- 							<p:column headerText="#{i18n['validar_clearCase.ambiente']}" -->
+<!-- 								style="width:100px; text-align: center;"> -->
+<!-- 								<h:outputText value="#{ClearCase.ambiente}"/> -->
+<!-- 							</p:column> -->
+							
+							<p:column headerText="#{i18n['validar_clearCase.fecha']}"
+								style="width:150px; text-align: center;">
+								<h:outputText value="#{ClearCase.fecha}"/>
+							</p:column>
+							
+							<p:column headerText="#{i18n['validar_clearCase.validacion']}"
+								style="width:150px; text-align: center;">
+								<h:outputText value="#{ClearCase.validacion}"/>
+							</p:column>
+							
+							<p:column headerText="#{i18n['validar_clearCase.validacion2']}"
+								style="width:150px; text-align: center;">
+								<h:outputText value="#{ClearCase.validacion2}"/>
+							</p:column>
+							
+							<p:column headerText="#{i18n['validar_clearCase.nomenclaturaCorrecta']}"
+								style="width:150px; text-align: center;">
+								<h:outputText value="#{ClearCase.nomenclaturaCorrecta}"/>
+							</p:column>
+
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+		
+		<!-- MODAL DE CONFIRMACION EN EL CLEARCASE -->
+		<p:confirmDialog
+			header="#{i18n['validar_clearCase.dialogConfirmar.cabecera']}"
+			message="#{i18n['validar_clearCase.dialogConfirmar.mensajeCondirmacion']}"
+			showEffect="fade" hideEffect="fade" widgetVar="wgvConfirmacionClearCase"
+			appendTo="@(body)">
+			<h:form id="frmConfirmarClearCase">
+				<center>
+					
+					<p:commandButton id="btnCargarDocumentoTXT"
+						value="#{i18n['validator_mis.dialogValidar.adjuntarTxt']}"
+						actionListener="#{cValidarClearCase.iniciarCargaDocumentoTXT()}"
+						update=":frmCargarDocumentoTXT :frmConfirmarClearCase" />
+					<p:tooltip for="btnCargarDocumentoTXT"
+						value="#{i18n['VALIDATOR.opcionCargar']}" />
+					
+					<p:spacer width="10" />
+					
+					<p:commandButton value="#{i18n['VALIDATOR.opcionSi']}"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+						actionListener="#{cValidarClearCase.buscarElementos()}"
+						update=":frmValidarClearCase" oncomplete="PF('wgvClearCase').clearFilters()" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionNo']}"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+						onclick="PF('wgvConfirmacionClearCase').hide()" />
+				</center>
+			</h:form>
+		</p:confirmDialog>
+		
+		<!-- 	Cargar documento TXT -->
+		<p:dialog header="Cargar Documento Rutas ClearCase"
+			widgetVar="wgvCargarDocumentoTXT" appendTo="@(body)"
+			id="dlgCargarDocumentoTXT" modal="true" resizable="false"
+			draggable="false" showEffect="fade" hideEffect="fade">
+
+			<h:form id="frmCargarDocumentoTXT" enctype="multipart/form-data">
+				<p:panelGrid columns="3">
+					<p:outputLabel for="upfDocumentoTXT" styleClass="miEstiloEtiqueta"
+						value="Documento" />
+					<p:spacer width="10" />
+					<p:fileUpload id="upfDocumentoTXT" mode="advanced"
+						fileUploadListener="#{cValidarClearCase.boClearCase.cargarArchivoTXT}"
+						label="#{i18n['VALIDATOR.documento']}"
+						uploadLabel="#{i18n['VALIDATOR.opcionCargar']}"
+						cancelLabel="#{i18n['VALIDATOR.opcionCancelar']}" fileLimit="1"
+						fileLimitMessage="#{i18n['VALIDATOR.limiteArchivosNoValido']}"
+						allowTypes="/(\.|\/)(txt)$/"
+						invalidFileMessage="#{i18n['VALIDATOR.tipoArchivoNoValido']}"
+						sizeLimit="2621440000000"
+						invalidSizeMessage="#{i18n['VALIDATOR.tamanioArchivoNoValido']}" />
+				</p:panelGrid>
+
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cValidarClearCase.convertirArchivoTXT()}"
+						update=":frmConfirmarClearCase :frmCargarDocumentoTXT"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvCargarDocumentoTXT').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>
+
+
+

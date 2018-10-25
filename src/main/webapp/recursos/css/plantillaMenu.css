@@ -1,0 +1,239 @@
+/*Estilo de dla cabecera */
+
+#cabecera{ width:100%; background-color:#ffffff; background-repeat:repeat-x; overflow:hidden; min-width:1024px; margin-top: -9px;}
+#cabecera .logo-sv{ width:19%; width:190px;   margin-left:20px; margin-top:-15px; float:left; overflow:hidden;}
+#cabecera .centrar{width:55%; height:50px; margin-left:300px; float:left;text-align:left; }
+#cabecera .centrar .presentacion{ width:95%;font-family:Arial, Helvetica, sans-serif; font-size:0.9em;margin-top:20px;}
+#cabecera .centrar .presentacion .derecha{float:right; width:40%; line-height:20px;}
+#cabecera .centrar .presentacion .izquierda{float:left; width:60%; line-height:20px;}
+#cabecera .logo-ev{ width:22%; width:225px; zoom:75%;  margin-right: 0px; float:right; margin-top:0px;}
+strong{ font-weight:bold;}
+
+/*Estilo de sombreado al señalar y color de letra */
+ul li.ui-menuitem-active>a {
+	background-image: none !important;
+	background-color: #5C8406 !important;
+	color: white;
+}
+
+/*Color de fondo de la lista submenu */
+.ui-menu-child {
+    background: #ffffff;
+}
+
+/*color del texto de la barra del menu */
+SPAN.ui-menuitem-text{
+	color: #ffffff;
+}
+
+.ui-menu.ui-widget li > .ui-menuitem-link.ui-state-hover .ui-menuitem-text {
+    color:white; 
+}
+
+/*Color letras submenu */
+.ui-menu .ui-menu-list UL LI A SPAN.ui-menuitem-text {
+	color: #A7A905;
+}
+
+.ui-widget-content .ui-state-default,.ui-panel-titlebar,.ui-widget-header{
+	border-color:#333333;
+	background: #333333;
+	color:#333333;
+	font:12px 'daxcompact-mediumregular';
+}
+
+.ui-layout-north {
+	z-index: 20 !important;
+	overflow: visible !important;
+}
+
+.ui-layout-unit-content {
+	overflow: visible !important;
+	background: #ffffff;
+	width:100%;
+	
+/* 	height:10000px; */
+}
+
+.ui-menubar{
+	margin-top: -19px;
+}
+
+/*Color del fondo del menu */
+.ui-menu,.ui-menubar,.ui-megamenu {
+	background: #A7A905;
+}
+
+.menuItems ul li a span.ui-menuitem-text {
+	float: left;
+}
+
+.ui-selectonemenu{
+	top:9px;
+}
+
+.ui-selectoneradio .ui-widget{
+	vertical-align: middle;
+}
+
+.ui-chkbox .ui-widget{
+	vertical-align: middle;
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+    -moz-box-shadow: inset 0 2px 2px #8f8f8f;
+    -webkit-box-shadow: inset 0 2px 2px #8f8f8f;
+    box-shadow: inset 0 2px 2px #8f8f8f;
+    color: #ffffff;
+    
+}
+
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited{
+	color: black;
+}
+
+.ui-accordion{
+    background-position: -16px -128px;
+   	background-color:white !important;
+   	color: #ffffff;
+   	
+}
+
+.ui-icon.ui-icon-triangle-1-e{
+	color: #FFF;
+}
+
+.red{
+   background-color:white !important;
+   background-image:white !important;
+}
+
+.errorRow { 
+   background-color: #FF5F5F !important; 
+	background-image: none !important; 
+	color: #000000 !important; 
+}
+
+.ui-datatable-data .ui-widget-content{
+	background-color: #ffffff;
+}
+
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {
+    border: 1px solid #FFFFFF;
+}
+
+.pe-dynaform-cell .ui-icon-calendar{
+	background-color: #5C8406;
+	border: 1px solid #5C8406;
+}
+SPAN.ui-button-text{
+	background-color: #5C8406;
+	color:white;
+	border:  1px solid #5C8406 !important;
+}
+
+.ui-datepicker-prev .ui-state-hover .ui-datepicker-prev-hover{
+	background-color: #5C8406 !important;
+	color: #5C8406 !important;
+}
+
+.ui-datatable tr.ui-datatable-even:hover, .ui-datatable tr.ui-datatable-odd:hover {
+    background: #D45A5B;
+}
+
+.ui-selectonemenu-item.ui-selectonemenu-list-item.ui-state-hover {
+    background: #D45A5B;
+    
+}
+
+ .ui-datepicker .ui-state-highlight{
+	 background-color: #FEF1A9 !important; 
+}
+
+.ui-menu.ui-widget .ui-separator {
+  height: 1px;
+  overflow: hidden;
+  background-color: #000000;
+  border:0 none;
+  border-bottom: 1px solid #ffffff;
+-webkit-box-shadow: none;
+-moz-box-shadow: none;
+     box-shadow: none;
+-webkit-border-radius: 0;
+ -moz-border-radius: 0;
+      border-radius: 0;
+}
+
+
+.commandbutton{
+	border: none;
+	border-radius:94px 94px 94px 94px;
+	
+	color: #5C8406;
+	cursor: pointer;
+	text-align: center;
+	height: 33px;
+	font: 18px/33px 'daxcompact-mediumregular';
+	width: 120px;
+}
+
+.ui-button .ui-widget{
+color: #5C8406;
+
+}
+
+.miEstiloEtiqueta{
+	color: black !important;
+}
+
+.miEstiloPanel {
+    margin-top: 75px;
+	color: black !important;
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+    background: #ffffff;
+    -moz-box-shadow: inset 0 2px 2px #8f8f8f;
+    -webkit-box-shadow: inset 0 2px 2px #8f8f8f;
+    box-shadow: inset 0 2px 2px #8f8f8f;
+    color: black !important;
+}
+
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited{
+      color: black !important;
+}
+
+.ui-panelgrid tr,.ui-panelgrid td {
+        background: none;
+
+        border-style: none !important;
+}
+
+#cerrar {
+	
+	color: #343434;
+	font: 14px/18px 'daxcompact-boldregular';
+	text-align: right;
+/* 	padding: 5px 30px 16px 0px; */
+/* 	height: 5px; */
+	margin: -30px 30px 0px 70px;
+/* 	margin-top: -29px; */
+	position: relative;
+}
+
+#cerrar a{
+	color: #343434;
+}
+
+.miEstiloPieChart1 {
+	colors : #ff0000 !important;
+	
+}
+
+.miEstiloPieChart2 {
+	colors: #2200ff !important;
+	
+}
+
+
+

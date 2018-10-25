@@ -1,0 +1,165 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+	
+		<h:form id="frmMantenerRutas">
+			<p:growl id="mensajeRutas" showSummary="false" showDetail="true"/>
+			<br/>
+			<div align="center">
+				<br/>
+				<p:outputLabel value="#{i18n['registrar_rutas.titulo']}"
+					style="font-weight: bold; font-size: 15px;"/>
+				<br /><br/>
+			</div>
+			<div align="center">
+				<h:panelGrid width="80%">
+					<br/>
+					<p:commandButton id="btnAgregar"
+						value="#{i18n['VALIDATOR.opcionAgregar']}"
+						actionListener="#{cMantenerRutas.iniciarAgregarRutas()}"
+						update=":frmAgregarRuta">
+						<p:resetInput target=" :frmAgregarRuta" />
+					</p:commandButton>
+					<br/>
+					<br/>
+					<center>
+						<br/>
+						<p:dataTable id="tblRUTAS" widgetVar="wgvRUTAS"
+							value="#{cMantenerRutas.listarRutas}" var="Rutas"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}" 
+							paginator="true" rows="15"
+							paginatorPosition="bottom"
+							emptyMessage="#{i18n['registrar_rutas.tablaRutaVacia']}">
+							
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cMantenerRutas.listarRutas.indexOf(Rutas)+1}
+							</p:column>
+							
+							<p:column headerText="#{i18n['registrar_rutas.nombreServidor']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Rutas.servidorValidatorRutas}" filterStyle="width:400px;">
+								<h:outputText value="#{Rutas.servidorValidatorRutas}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['registrar_rutas.rutaServidor']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Rutas.rutaValidatorRutas}" />
+							</p:column>
+							
+							<p:column headerText="#{i18n['registrar_rutas.fechaRegistro']}"
+								style="width:200px; text-align: center;">
+								<h:outputText value="#{Rutas.fechaRegistro}">
+									<f:convertDateTime pattern="dd-MM-yyyy" timeZone="America/Lima" />
+								</h:outputText>
+							</p:column>
+							
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+		
+<!-- 	MODAL AGREAGAR RUTA SERVIDOR -->
+
+		<p:dialog header="#{i18n['registrar_rutas.agregarRuta']}"
+			widgetVar="wgvAgregarRuta" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmAgregarRuta">
+				<br/>
+				<br/>
+				<div align="center">
+					<h:panelGrid columns="6">
+						
+						<p:commandButton id="btnCargarDocumentoRutas"
+							value="#{i18n['registrar_rutas.dialogAgregar.cargarArchivo']}"
+							actionListener="#{cMantenerRutas.iniciarCargaDocumentoTXT()}"
+							update=":frmCargarDocumentoTXT :frmAgregarRuta" />
+						<p:tooltip for="btnCargarDocumentoRutas"
+							value="#{i18n['VALIDATOR.opcionCargar']}"/>
+						<p:spacer width="10" />
+						
+						<p:commandButton id="btnVisualizarInformacion"
+							value="#{i18n['registrar_rutas.dialogAgregar.visualizarInfo']}"
+							actionListener="#{cMantenerRutas.visualizarInformacion()}"
+							update=":frmAgregarRuta" />
+						<p:tooltip for="btnVisualizarInformacion"
+							value="#{i18n['VALIDATOR.opcionCargar']}"/>
+						
+					</h:panelGrid>
+				</div>
+				<br />
+				<h:panelGrid columns="3">
+					
+					<p:outputLabel styleClass="miEstiloEtiqueta" value="#{i18n['registrar_rutas.dialogAgregar.nombreServidor']}"/>
+					<p:spacer width="10" />
+					<p:outputLabel value="#{cMantenerRutas.boArchivoRutas.servidorValidatorRutas}" />		
+					
+					<p:outputLabel styleClass="miEstiloEtiqueta" value="#{i18n['registrar_rutas.dialogAgregar.rutaServidor']}"/>
+					<p:spacer width="10" />
+					<p:outputLabel value="#{cMantenerRutas.boArchivoRutas.rutaValidatorRutas}" />
+					
+				</h:panelGrid>
+				
+				<br/>
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerRutas.agregarRutaServidor()}"
+						update=":frmMantenerRutas :frmAgregarRuta"
+						oncomplete="PF('wgvRUTAS').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvAgregarRuta').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- 	Cargar documento TXT -->
+		<p:dialog header="Cargar Documento Rutas"
+			widgetVar="wgvCargarDocumentoTXT" appendTo="@(body)"
+			id="dlgCargarDocumentoTXT" modal="true" resizable="false"
+			draggable="false" showEffect="fade" hideEffect="fade">
+
+			<h:form id="frmCargarDocumentoTXT" enctype="multipart/form-data">
+				<p:panelGrid columns="3">
+					<p:outputLabel for="upfDocumentoTXT" styleClass="miEstiloEtiqueta"
+						value="Documento" />
+					<p:spacer width="10" />
+					<p:fileUpload id="upfDocumentoTXT" mode="advanced"
+						fileUploadListener="#{cMantenerRutas.fArchivoRutas.cargarArchivoTXT}"
+						label="#{i18n['VALIDATOR.documento']}"
+						uploadLabel="#{i18n['VALIDATOR.opcionCargar']}"
+						cancelLabel="#{i18n['VALIDATOR.opcionCancelar']}" fileLimit="1"
+						fileLimitMessage="#{i18n['VALIDATOR.limiteArchivosNoValido']}"
+						allowTypes="/(\.|\/)(log)$/"
+						invalidFileMessage="#{i18n['VALIDATOR.tipoArchivoNoValido']}"
+						sizeLimit="2621440000000"
+						invalidSizeMessage="#{i18n['VALIDATOR.tamanioArchivoNoValido']}" />
+				</p:panelGrid>
+
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerRutas.convertirArchivoTXT()}"
+						update=":frmAgregarRuta :frmCargarDocumentoTXT"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvCargarDocumentoTXT').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+		
+
+	</ui:define>
+</ui:composition>

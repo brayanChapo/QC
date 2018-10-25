@@ -1,0 +1,164 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmMantenerVOB">
+			<p:growl id="mensajeVOB" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['mantener_VOB.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<div align="center">
+				<h:panelGrid width="60%">
+					<br />
+					<p:commandButton id="btnAgregarVOB"
+						value="#{i18n['VALIDATOR.opcionAgregar']}"
+						actionListener="#{cMantenerVOB.iniciarAgregarVOB()}"
+						update=":frmAgregarVOB">
+						<p:resetInput target=" :frmAgregarVOB" />
+					</p:commandButton>
+					<br />
+					<br />
+
+					<center>
+						<br />
+						<p:dataTable id="tblVOB" widgetVar="wgvVOB"
+							value="#{cMantenerVOB.listarVob}" var="Vob"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="10"
+							paginatorPosition="bottom"
+							emptyMessage="#{i18n['mantener_VOB.tablaVobVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cMantenerVOB.listarVob.indexOf(Vob)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_VOB.nombreVOB']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Vob.nombreVob}" filterStyle="width:400px;">
+								<h:outputText value="#{Vob.nombreVob}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_VOB.opcionesVOB']}"
+								style="width:150px; text-align: center;">
+								<div align="center">
+									<p:commandButton id="btnModificarVOB" icon="ui-icon-pencil"
+										disabled="#{cMantenerVOB.obtenerinfo(Vob)}"
+										actionListener="#{cMantenerVOB.iniciarModificarVob(Vob)}"
+										update=":frmModificarVOB">
+									</p:commandButton>
+									<p:tooltip for="btnModificarVOB"
+										value="#{i18n['VALIDATOR.opcionModificar']}" />
+									<p:commandButton id="btnEliminarVOB" icon="ui-icon-trash"
+										disabled="#{cMantenerVOB.obtenerinfo(Vob)}"
+										oncomplete="PF('wgvVOB').clearFilters()"
+										actionListener="#{cMantenerVOB.setBoVob(Vob)}"
+										onclick="PF('wgvEliminarVOB').show()"
+										update=":frmEliminarVob">
+									</p:commandButton>
+									<p:tooltip for="btnEliminarVOB"
+										value="#{i18n['VALIDATOR.opcionEliminar']}" />
+								</div>
+							</p:column>
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+		<!--MODAL AGREGAR VOB-->
+
+		<p:dialog header="#{i18n['mantener_VOB.dialogAgregar.cabecera']}"
+			widgetVar="wgvAgregarVOB" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmAgregarVOB">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="txtVOB" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_VOB.dialogAgregar.nombre']}" />
+					<p:spacer width="10" />
+					<p:inputText id="txtVOB" required="true"
+						value="#{cMantenerVOB.boVob.nombreVob}"
+						requiredMessage="#{i18n['mantener_VOB.dialogAgregar.nombreRequerido']}"
+						size="52" maxlength="40" />
+				</h:panelGrid>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerVOB.agregarVob()}"
+						update=":frmMantenerVOB :frmAgregarVOB"
+						oncomplete="PF('wgvVOB').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvAgregarVOB').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+
+		<!--MODAL MODIFICAR VOB-->
+		<p:dialog header="#{i18n['mantener_VOB.dialogModificar.cabecera']}"
+			widgetVar="wgvModificarVOB" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmModificarVOB">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="txtVOB" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_VOB.dialogModificar.nombre']}" />
+					<p:spacer width="10" />
+					<p:inputText id="txtVOB" required="true"
+						value="#{cMantenerVOB.boVob.nombreVob}"
+						requiredMessage="#{i18n['mantener_VOB.dialogAgregar.nombreRequerido']}"
+						size="52" maxlength="40" />
+				</h:panelGrid>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerVOB.modificarVob()}"
+						update=":frmMantenerVOB :frmModificarVOB"
+						oncomplete="PF('wgvVOB').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvModificarVOB').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+
+		<!-- MODAL DE CONFIRMACION DE ELIMINACION -->
+		<p:confirmDialog
+			header="#{i18n['mantener_VOB.dialogEliminar.cabecera']}"
+			message="#{i18n['mantener_VOB.dialogEliminar.mensajeConfirmacion']}"
+			showEffect="fade" hideEffect="fade" widgetVar="wgvEliminarVOB"
+			appendTo="@(body)">
+			<h:form id="frmEliminarVob">
+				<center>
+					<p:commandButton value="#{i18n['MFMF.opcionSi']}"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+						actionListener="#{cMantenerVOB.eliminarVob()}"
+						update=":frmMantenerVOB" oncomplete="PF('wgvVOB').clearFilters()" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionNo']}"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+						onclick="PF('wgvEliminarVOB').hide()" />
+				</center>
+			</h:form>
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>

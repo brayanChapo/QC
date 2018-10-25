@@ -1,0 +1,299 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmMantenerUsuario">
+			<p:growl id="mensajeUsuario" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['mantener_Usuario.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<div align="center">
+				<h:panelGrid width="80%">
+					<br />
+					<p:commandButton id="btnAgregarUsuario"
+						value="#{i18n['VALIDATOR.opcionAgregar']}"
+						actionListener="#{cMantenerUsuario.iniciarAgregarUsuario()}"
+						update=":frmAgregarUsuario">
+						<p:resetInput target=" :frmAgregarUsuario" />
+					</p:commandButton>
+					<br />
+					<br />
+
+					<center>
+						<br />
+						<p:dataTable id="tblUsuario" widgetVar="wgvUsuario"
+							value="#{cMantenerUsuario.listarUsuario}" var="Usuario"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							emptyMessage="#{i18n['mantener_Usuario.tablaUsuarioVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cMantenerUsuario.listarUsuario.indexOf(Usuario)+1}
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_Usuario.nombreUsuario']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Usuario.nombreUsuario}" filterStyle="width:200px;">
+								<h:outputText value="#{Usuario.nombreUsuario}" />
+							</p:column>
+
+							<p:column
+								headerText="#{i18n['mantener_Usuario.apellidoUsuario']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Usuario.apellidoUsuario}" filterStyle="width:200px;">
+								<h:outputText value="#{Usuario.apellidoUsuario}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_Usuario.codigoUsuario']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Usuario.codigoUsuario}" filterStyle="width:200px;">
+								<h:outputText value="#{Usuario.codigoUsuario}" />
+							</p:column>
+
+							<p:column
+								headerText="#{i18n['mantener_Usuario.opcionesUsuario']}"
+								style="width:150px; text-align: center;">
+								<div align="center">
+									<p:commandButton id="btnModificarUsuario" icon="ui-icon-pencil"
+										actionListener="#{cMantenerUsuario.iniciarModificarUsuario(Usuario)}"
+										update=":frmModificarUsuario">
+									</p:commandButton>
+									<p:tooltip for="btnModificarUsuario"
+										value="#{i18n['VALIDATOR.opcionModificar']}" />
+									<p:commandButton id="btnEliminarUsuario" icon="ui-icon-trash"
+										oncomplete="PF('wgvUsuario').clearFilters()"
+										actionListener="#{cMantenerUsuario.setBoUsuario(Usuario)}"
+										onclick="PF('wgvEliminarUsuario').show()" update=":frmEliminarUsuario">
+									</p:commandButton>
+									<p:tooltip for="btnEliminarUsuario"
+										value="#{i18n['VALIDATOR.opcionEliminar']}" />
+								</div>
+							</p:column>
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+		<!--MODAL AGREGAR USUARIO-->
+
+		<p:dialog header="#{i18n['mantener_Usuario.dialogAgregar.cabecera']}"
+			widgetVar="wgvAgregarUsuario" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmAgregarUsuario">
+				<h:panelGrid columns="11">
+					<p:outputLabel for="txtUsuario" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogAgregar.nombre']}" />
+
+					<p:spacer width="10" />
+
+					<p:inputText id="txtUsuario" required="true"
+						value="#{cMantenerUsuario.boUsuario.nombreUsuario}"
+						requiredMessage="#{i18n['mantener_Usuario.dialogAgregar.nombreRequerido']}"
+						size="30" maxlength="30" />
+
+					<p:spacer width="10" />
+
+					<p:outputLabel for="txtUsuarioAp" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogAgregar.apellido']}" />
+
+					<p:spacer width="10" />
+
+					<p:inputText id="txtUsuarioAp" required="true"
+						value="#{cMantenerUsuario.boUsuario.apellidoUsuario}"
+						requiredMessage="#{i18n['mantener_Usuario.dialogAgregarApellidoNoValida']}"
+						size="30" maxlength="30" />
+					<p:spacer width="10" />
+
+					<p:outputLabel for="txtRol" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogAgregar.rol']}" />
+					<p:spacer width="10" />
+					<p:selectOneMenu id="txtRol" style="margin-top: -20px; width: 200px"
+						value="#{cMantenerUsuario.boUsuario.idRol}" required="true"
+						requiredMessage="#{i18n['mantener_Usuario.dialogAgregarRolNoValida']}">
+						<f:selectItem
+							itemLabel="#{i18n['mantener_Usuario.dialogAgregar.seleccioneRol']}"
+							itemValue="#{null}" />
+						<f:selectItems value="#{cMantenerUsuario.boUsuario.listaroles}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel for="txtcodigo" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogAgregar.codigo']}" />
+						
+					<p:spacer width="10" />
+					
+					<p:inputMask id="txtcodigo" required="true" mask="s*****"
+						value="#{cMantenerUsuario.boUsuario.codigoUsuario}"
+						requiredMessage="#{i18n['mantener_Usuario.dialogAgregar.codigoRequerido']}"
+						size="30" maxlength="6" />
+						
+					<p:spacer width="10" />
+					
+					<p:outputLabel for="txtpass" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogAgregar.pass']}" />
+						
+					<p:spacer width="10" />
+					
+					<p:password id="txtpass" required="true"
+						value="#{cMantenerUsuario.boUsuario.passUsuario}"
+						requiredMessage="#{i18n['mantener_Usuario.dialogAgregarPassNoValida']}"
+						size="30" maxlength="30" />
+						
+					<p:spacer width="10" />	
+					
+					<p:outputLabel for="txtArea" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogAgregar.area']}" />
+						
+					<p:spacer width="10" />
+					
+					<p:selectOneMenu id="txtArea" style="margin-top: -20px; width: 200px"
+						value="#{cMantenerUsuario.boUsuario.idArea}" required="true"
+						requiredMessage="#{i18n['mantener_Usuario.dialogAgregarAreaNoValida']}">
+						<f:selectItem
+							itemLabel="#{i18n['mantener_Usuario.dialogAgregar.seleccioneArea']}"
+							itemValue="#{null}" />
+						<f:selectItems value="#{cMantenerUsuario.boUsuario.listaAreas}" />
+					</p:selectOneMenu>
+					
+				</h:panelGrid>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerUsuario.agregarUsuario()}"
+						update=":frmMantenerUsuario :frmAgregarUsuario"
+						oncomplete="PF('wgvUsuario').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvAgregarUsuario').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!--MODAL MODIFICAR USUARIO-->
+
+		<p:dialog
+			header="#{i18n['mantener_Usuario.dialogModificar.cabecera']}"
+			widgetVar="wgvModificarUsuario" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmModificarUsuario">
+				<h:panelGrid columns="11">
+					<p:outputLabel for="txtUsuario" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogModificar.nombre']}" />
+
+					<p:spacer width="10" />
+
+					<p:inputText id="txtUsuario" required="true"
+						value="#{cMantenerUsuario.boUsuario.nombreUsuario}"
+						requiredMessage="#{i18n['mantener_Usuario.dialogModificar.nombreRequerido']}"
+						size="30" maxlength="30" />
+
+					<p:spacer width="10" />
+
+					<p:outputLabel for="txtUsuarioAp" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogModificar.apellido']}" />
+
+					<p:spacer width="10" />
+
+					<p:inputText id="txtUsuarioAp" required="true"
+						value="#{cMantenerUsuario.boUsuario.apellidoUsuario}"
+						requiredMessage="#{i18n['mantener_Usuario.dialogModificarApellidoNoValida']}"
+						size="30" maxlength="30" />
+					<p:spacer width="10" />
+
+					<p:outputLabel for="txtRol" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogModificar.rol']}" />
+					<p:spacer width="10" />
+					<p:selectOneMenu id="txtRol" style="margin-top: -20px; width: 200px"
+						value="#{cMantenerUsuario.boUsuario.idRol}" required="true"
+						requiredMessage="#{i18n['mantener_Usuario.dialogModificarRolNoValida']}">
+						<f:selectItem
+							itemLabel="#{i18n['mantener_Usuario.dialogModificar.seleccioneRol']}"
+							itemValue="#{null}" />
+						<f:selectItems value="#{cMantenerUsuario.boUsuario.listaroles}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel for="txtcodigo" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogModificar.codigo']}" />
+					<p:spacer width="10" />
+					<p:inputText id="txtcodigo" required="true"
+						value="#{cMantenerUsuario.boUsuario.codigoUsuario}"
+						requiredMessage="#{i18n['mantener_Usuario.dialogModificar.codigoRequerido']}"
+						size="30" maxlength="6" />
+					<p:spacer width="10" />
+					<p:outputLabel for="txtpass" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogModificar.pass']}" />
+					<p:spacer width="10" />
+					<p:password id="txtpass" required="true"
+						value="#{cMantenerUsuario.boUsuario.passUsuario}"
+						requiredMessage="#{i18n['mantener_Usuario.dialogModificarPassNoValida']}"
+						size="30" maxlength="30" />
+						
+					<p:spacer width="10" />	
+					
+					<p:outputLabel for="txtArea" styleClass="miEstiloEtiqueta"
+						value="#{i18n['mantener_Usuario.dialogAgregar.area']}" />
+						
+					<p:spacer width="10" />
+					
+					<p:selectOneMenu id="txtArea" style="margin-top: -20px; width: 200px"
+						value="#{cMantenerUsuario.boUsuario.idArea}" required="true"
+						requiredMessage="#{i18n['mantener_Usuario.dialogAgregarAreaNoValida']}">
+						<f:selectItem
+							itemLabel="#{i18n['mantener_Usuario.dialogAgregar.seleccioneArea']}"
+							itemValue="#{null}" />
+						<f:selectItems value="#{cMantenerUsuario.boUsuario.listaAreas}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerUsuario.modificarUsuario()}"
+						update=":frmMantenerUsuario :frmModificarUsuario"
+						oncomplete="PF('wgvUsuario').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvModificarUsuario').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<!-- MODAL DE CONFIRMACION DE ELIMINACION -->
+		<p:confirmDialog
+			header="#{i18n['mantener_Usuario.dialogEliminar.cabecera']}"
+			message="#{i18n['mantener_Usuario.dialogEliminar.mensajeConfirmacion']}"
+			showEffect="fade" hideEffect="fade" widgetVar="wgvEliminarUsuario"
+			appendTo="@(body)">
+			<h:form id="frmEliminarUsuario">
+				<center>
+					<p:commandButton value="#{i18n['MFMF.opcionSi']}"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+						actionListener="#{cMantenerUsuario.eliminarUsuario()}"
+						update=":frmMantenerUsuario" oncomplete="PF('wgvUsuario').clearFilters()" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionNo']}"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+						onclick="PF('wgvEliminarUsuario').hide()" />
+				</center>
+			</h:form>
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>

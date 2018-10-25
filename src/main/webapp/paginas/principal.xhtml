@@ -1,0 +1,21 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/plantilla.xhtml">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmPrincipal">
+			<p:growl id="mess" showDetail="true" />
+			<center>
+				<br />
+				<br />
+				<img src="#{request.contextPath}/recursos/img/EVERIS-1.jpg" style="height: 750px;width: 900;margin-top: -10px"/>
+			</center>
+		</h:form>
+	</ui:define>
+	
+</ui:composition>

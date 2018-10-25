@@ -1,0 +1,333 @@
+<ui:composition template="/plantillas/plantilla.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="metadata" />
+	<ui:define name="content">
+
+		<h:form id="frmMantenerAplicativo">
+			<p:growl id="mensajeAplicativo" showSummary="false" showDetail="true" />
+			<br />
+			<div align="center">
+				<br />
+				<p:outputLabel value="#{i18n['mantener_Aplicativo.titulo']}"
+					style="font-weight: bold; font-size: 15px;" />
+				<br /> <br />
+			</div>
+			<div align="center">
+				<h:panelGrid width="80%">
+					<br />
+					<p:commandButton id="btnAgregarAplicativo"
+						value="#{i18n['VALIDATOR.opcionAgregar']}"
+						actionListener="#{cMantenerAplicativo.iniciarAgregarAplicativo()}"
+						update=":frmAgregarAplicativo">
+						<p:resetInput target=" :frmAgregarAplicativo" />
+					</p:commandButton>
+					<br />
+					<br />
+
+					<center>
+						<p:dataTable id="tblMantenerAplicativo" widgetVar="wgvAplicativo"
+							value="#{cMantenerAplicativo.listaMapAplicativo}"
+							var="mapAplicativo"
+							currentPageReportTemplate="{currentPage} de {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+							 {NextPageLink} {LastPageLink}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							emptyMessage="#{i18n['mantener_Aplicativo.tablaAplicativoVacia']}">
+
+							<p:column headerText="N°" style="width:50px; text-align: center;">
+								#{cMantenerAplicativo.listaMapAplicativo.indexOf(mapAplicativo)+1}
+							</p:column>
+
+							<p:column
+								headerText="#{i18n['mantener_Aplicativo.nombreAplicativo']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{mapAplicativo.nombreAplicativo}"
+								filterStyle="width:200px;">
+								<h:outputText value="#{mapAplicativo.nombreAplicativo}" />
+							</p:column>
+
+							<p:column
+								headerText="#{i18n['mantener_Aplicativo.nombreDominio']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Aplicativo.nombreDominio}"
+								filterStyle="width:200px;">
+								<h:outputText value="#{mapAplicativo.nombreDominio}" />
+							</p:column>
+
+							<p:column headerText="#{i18n['mantener_Aplicativo.nombreVob']}"
+								style="width:200px; text-align: center;"
+								filterBy="#{Aplicativo.nombreVob}" filterStyle="width:200px;">
+								<h:outputText value="#{mapAplicativo.nombreVob}" />
+							</p:column>
+
+							<p:column
+								headerText="#{i18n['mantener_Aplicativo.opcionesAplicativo']}"
+								style="width:150px; text-align: center;">
+								<div align="center">
+									<p:commandButton id="btnModificarAplicativo"
+										icon="ui-icon-pencil"
+										actionListener="#{cMantenerAplicativo.iniciarModificarAplicativo(mapAplicativo)}"
+										update=":frmModificarAplicativo">
+									</p:commandButton>
+									<p:tooltip for="btnModificarAplicativo"
+										value="#{i18n['VALIDATOR.opcionModificar']}" />
+									<p:commandButton id="btnEliminarAplicativo"
+										icon="ui-icon-trash"
+										oncomplete="PF('wgvAplicativo').clearFilters()"
+										actionListener="#{cMantenerAplicativo.setMapAplicativo(mapAplicativo)}"
+										onclick="PF('wgvEliminarAplicativo').show()"
+										update=":frmEliminarAplicativo">
+									</p:commandButton>
+									<p:tooltip for="btnEliminarAplicativo"
+										value="#{i18n['VALIDATOR.opcionEliminar']}" />
+								</div>
+							</p:column>
+
+						</p:dataTable>
+					</center>
+				</h:panelGrid>
+			</div>
+		</h:form>
+
+		<!--MODAL AGREGAR Aplicativo-->
+
+		<p:dialog
+			header="#{i18n['mantener_Aplicativo.dialogAgregar.cabecera']}"
+			widgetVar="wgvAgregarAplicativo" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmAgregarAplicativo">
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="3" style="margin-top: 0px;">
+						<p:outputLabel for="txtAplicativo" styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Aplicativo.dialogAgregar.nombre']}" />
+						<p:spacer width="10" />
+						<p:inputText id="txtAplicativo" required="true"
+							value="#{cMantenerAplicativo.boAplicativo.nombreAplicativo}"
+							requiredMessage="#{i18n['mantener_Aplicativo.dialogAgregar.nombreRequerido']}"
+							size="40" maxlength="40" />
+
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+
+						<p:outputLabel for="txtNombreVob" styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Aplicativo.dialogAgregar.nombreVob']}" />
+						<p:spacer width="10" />
+						<p:inputText id="txtNombreVob"
+							value="#{cMantenerAplicativo.nombreVob}" size="40" maxlength="40" />
+
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+
+						<p:outputLabel for="txtNombreDominio"
+							styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Aplicativo.dialogAgregar.nombreDominio']}" />
+						<p:spacer width="10" />
+						<p:inputText id="txtNombreDominio"
+							value="#{cMantenerAplicativo.nombreDominio}" size="40"
+							maxlength="40" />
+					</h:panelGrid>
+					<p:fieldset>
+						<h:panelGrid columns="3">
+							<h:panelGrid>
+								<h:panelGrid columns="3">
+									<p:outputLabel for="txtDominio" styleClass="miEstiloEtiqueta"
+										value="#{i18n['mantener_Aplicativo.dialogAgregar.dominio']}" />
+									<p:spacer width="10" />
+									<p:inputText size="18" maxlength="18" value="#{cMantenerAplicativo.nombreDominioBuscar}" >
+										<p:ajax event="keyup" update="txtDominio" 
+										listener="#{cMantenerAplicativo.buscarDominio()}" />
+									</p:inputText>
+									
+									<p:spacer width="10" />
+									<p:spacer width="10" />
+									<h:selectOneListbox id="txtDominio" required="true" size="6" style="width: 100% !important"
+										requiredMessage="#{i18n['mantener_Aplicativo.dialogAgregar.dominioRequerido']}"
+										value="#{cMantenerAplicativo.boAplicativo.idDominio}">
+										<p:ajax update="txtNombreDominio"
+										listener="#{cMantenerAplicativo.obtenerNombreDominio()}" />
+										<f:selectItems
+											value="#{cMantenerAplicativo.boAplicativo.listaDominio}" />
+									</h:selectOneListbox>
+									
+								</h:panelGrid>
+
+							</h:panelGrid>
+							<p:spacer width="10" />
+							<h:panelGrid>
+								<h:panelGrid columns="3">
+									<p:outputLabel for="txtVob" styleClass="miEstiloEtiqueta"
+										value="#{i18n['mantener_Aplicativo.dialogAgregar.vob']}" />
+									<p:spacer width="10" />
+									<p:inputText size="65" maxlength="65" value="#{cMantenerAplicativo.nombreVobBuscar}">
+										<p:ajax event="keyup" update="txtVob" 
+										listener="#{cMantenerAplicativo.buscarVob()}" />
+									</p:inputText>
+									<p:spacer width="10" />
+									<p:spacer width="10" />
+									<h:selectOneListbox id="txtVob" required="true" size="6" style="width: 100% !important"
+										requiredMessage="#{i18n['mantener_Aplicativo.dialogAgregar.vobRequerido']}"
+										value="#{cMantenerAplicativo.boAplicativo.idVob}">
+										<p:ajax update="txtNombreVob"
+										listener="#{cMantenerAplicativo.obtenerNombreVob()}" />
+										<f:selectItems
+											value="#{cMantenerAplicativo.boAplicativo.listaVob}" />
+									</h:selectOneListbox>
+								</h:panelGrid>
+							</h:panelGrid>
+
+						</h:panelGrid>
+					</p:fieldset>
+				</h:panelGrid>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerAplicativo.agregarAplicativo()}"
+						update=":frmMantenerAplicativo :frmAgregarAplicativo"
+						oncomplete="PF('wgvAplicativo').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvAgregarAplicativo').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!--MODAL MODIFICAR Aplicativo-->
+
+		<p:dialog
+			header="#{i18n['mantener_Aplicativo.dialogModificar.cabecera']}"
+			widgetVar="wgvModificarAplicativo" appendTo="@(body)" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false"
+			draggable="false">
+			<h:form id="frmModificarAplicativo">
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="3" style="margin-top: 0px;">
+						<p:outputLabel for="txtAplicativo" styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Aplicativo.dialogModificar.nombre']}" />
+						<p:spacer width="10" />
+						<p:inputText id="txtAplicativo" required="true"
+							value="#{cMantenerAplicativo.boAplicativo.nombreAplicativo}"
+							requiredMessage="#{i18n['mantener_Aplicativo.dialogModificar.nombreRequerido']}"
+							size="30" maxlength="30" />
+							
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+
+						<p:outputLabel for="txtNombreVob" styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Aplicativo.dialogAgregar.nombreVob']}" />
+						<p:spacer width="10" />
+						<p:inputText id="txtNombreVob"
+							value="#{cMantenerAplicativo.nombreVob}" size="40" maxlength="40" />
+
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+						<p:spacer width="10" />
+
+						<p:outputLabel for="txtNombreDominio"
+							styleClass="miEstiloEtiqueta"
+							value="#{i18n['mantener_Aplicativo.dialogAgregar.nombreDominio']}" />
+						<p:spacer width="10" />
+						<p:inputText id="txtNombreDominio"
+							value="#{cMantenerAplicativo.nombreDominio}" size="40"
+							maxlength="40" />
+					</h:panelGrid>
+					<p:fieldset>
+						<h:panelGrid columns="3">
+							<h:panelGrid>
+								<h:panelGrid columns="3">
+									<p:outputLabel for="txtDominio" styleClass="miEstiloEtiqueta"
+										value="#{i18n['mantener_Aplicativo.dialogAgregar.dominio']}" />
+									<p:spacer width="10" />
+									<p:inputText size="18" maxlength="18" value="#{cMantenerAplicativo.nombreDominioBuscar}" >
+										<p:ajax event="keyup" update="txtDominio" 
+										listener="#{cMantenerAplicativo.buscarDominio()}" />
+									</p:inputText>
+									
+									<p:spacer width="10" />
+									<p:spacer width="10" />
+									<h:selectOneListbox id="txtDominio" required="true" size="6" style="width: 100% !important"
+										requiredMessage="#{i18n['mantener_Aplicativo.dialogAgregar.dominioRequerido']}"
+										value="#{cMantenerAplicativo.boAplicativo.idDominio}">
+										<p:ajax update="txtNombreDominio"
+										listener="#{cMantenerAplicativo.obtenerNombreDominio()}" />
+										<f:selectItems
+											value="#{cMantenerAplicativo.boAplicativo.listaDominio}" />
+									</h:selectOneListbox>
+									
+								</h:panelGrid>
+
+							</h:panelGrid>
+							<p:spacer width="10" />
+							<h:panelGrid>
+								<h:panelGrid columns="3">
+									<p:outputLabel for="txtVob" styleClass="miEstiloEtiqueta"
+										value="#{i18n['mantener_Aplicativo.dialogAgregar.vob']}" />
+									<p:spacer width="10" />
+									<p:inputText size="65" maxlength="65" value="#{cMantenerAplicativo.nombreVobBuscar}">
+										<p:ajax event="keyup" update="txtVob" 
+										listener="#{cMantenerAplicativo.buscarVob()}" />
+									</p:inputText>
+									<p:spacer width="10" />
+									<p:spacer width="10" />
+									<h:selectOneListbox id="txtVob" required="true" size="6" style="width: 100% !important"
+										requiredMessage="#{i18n['mantener_Aplicativo.dialogAgregar.vobRequerido']}"
+										value="#{cMantenerAplicativo.boAplicativo.idVob}">
+										<p:ajax update="txtNombreVob"
+										listener="#{cMantenerAplicativo.obtenerNombreVob()}" />
+										<f:selectItems
+											value="#{cMantenerAplicativo.boAplicativo.listaVob}" />
+									</h:selectOneListbox>
+								</h:panelGrid>
+							</h:panelGrid>
+
+						</h:panelGrid>
+					</p:fieldset>
+				</h:panelGrid>
+				<br />
+				<div align="center">
+					<p:commandButton value="#{i18n['VALIDATOR.opcionGuardar']}"
+						actionListener="#{cMantenerAplicativo.modificarAplicativo()}"
+						update=":frmMantenerAplicativo :frmModificarAplicativo"
+						oncomplete="PF('wgvAplicativo').clearFilters()"
+						style="background-color:#c21315; color:white;border:none" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionCancelar']}"
+						onclick="PF('wgvModificarAplicativo').hide()" inmediate="true"
+						style="background-color:#c21315; color:white;border:none" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- MODAL DE CONFIRMACION DE ELIMINACION -->
+		<p:confirmDialog
+			header="#{i18n['mantener_Aplicativo.dialogEliminar.cabecera']}"
+			message="#{i18n['mantener_Aplicativo.dialogEliminar.mensajeConfirmacion']}"
+			showEffect="fade" hideEffect="fade" widgetVar="wgvEliminarAplicativo"
+			appendTo="@(body)">
+			<h:form id="frmEliminarAplicativo">
+				<center>
+					<p:commandButton value="#{i18n['MFMF.opcionSi']}"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+						actionListener="#{cMantenerAplicativo.eliminarAplicativo()}"
+						update=":frmMantenerAplicativo"
+						oncomplete="PF('wgvAplicativo').clearFilters()" />
+					<p:spacer width="10" />
+					<p:commandButton value="#{i18n['VALIDATOR.opcionNo']}"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+						onclick="PF('wgvEliminarAplicativo').hide()" />
+				</center>
+			</h:form>
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>

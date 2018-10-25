@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<global-method-security secured-annotations="enabled"
+		pre-post-annotations="enabled" jsr250-annotations="enabled" />
+
+
+	<http use-expressions="true">
+		
+		<intercept-url pattern="/paginas/principal.jsf" access="hasRole('ROL_PRINCIPAL')" />
+		
+		<!-- SECCION MANTENIMIENTO -->
+		<intercept-url pattern="/paginas/min_mantenerVOB.jsf"
+			access="hasRole('ROL_MANTENER_VOB')" />
+
+		<intercept-url pattern="/paginas/min_mantenerDominio.jsf"
+			access="hasRole('ROL_MANTENER_DOMINIO')" />
+
+		<intercept-url pattern="/paginas/min_mantenerUsuario.jsf"
+			access="hasRole('ROL_MANTENER_USUARIO')" />
+
+
+		<intercept-url pattern="/paginas/min_mantenerAplicativo.jsf"
+			access="hasRole('ROL_MANTENER_APLICATIVO')" />
+			
+		<!-- SECCION CONSULTA -->
+		<intercept-url pattern="/paginas/cin_consultarAplicativo.jsf"
+			access="hasRole('ROL_CONSULTAR_APLICATIVO')" />
+			
+		<intercept-url pattern="/paginas/cin_consultarDominio.jsf"
+			access="hasRole('ROL_CONSULTAR_DOMINIO')" />
+			
+		<intercept-url pattern="/paginas/cin_consultarCmdb.jsf"
+			access="hasRole('ROL_CONSULTAR_CMDB')" />
+			
+		<intercept-url pattern="/paginas/cin_consultarVOB.jsf"
+			access="hasRole('ROL_CONSULTAR_VOB')" />
+		
+		<!-- SECCION VALIDACION -->
+		
+		<intercept-url pattern="/paginas/min_mantenerRutas.jsf"
+			access="hasRole('ROL_VALIDAR_RUTAS')" />
+		
+		<intercept-url pattern="/paginas/min_mantenerTk.jsf"
+			access="hasRole('ROL_VALIDAR_SOLICITUD')" />
+			
+		<intercept-url pattern="/paginas/validar_MIS.jsf"
+			access="hasRole('ROL_VALIDAR_MIS')" />
+			
+		<intercept-url pattern="/paginas/validar_clearCase.jsf"
+			access="hasRole('ROL_VALIDAR_CLEARCASE')" />
+			
+		<intercept-url pattern="/paginas/reg_TareaRechazadas.jsf"
+			access="hasRole('ROL_TAS')" />
+		
+		<!-- SECCION REVISAR -->
+		<intercept-url pattern="/paginas/revisar_Solicitud.jsf"
+			access="hasRole('ROL_REVISAR_SOLICITUD')" />
+			
+		<intercept-url pattern="/paginas/revisar_MIS.jsf"
+			access="hasRole('ROL_REVISAR_MIS')" />	
+		
+		<!-- SECCION REPORTE -->
+		<intercept-url pattern="/paginas/rep_reporteMIS.jsf"
+			access="hasRole('ROL_REPORTE_MIS')" />
+			
+		<intercept-url pattern="/paginas/rep_reporteTarea.jsf"
+			access="hasRole('ROL_REPORTE_TAS')" />
+		
+		<!-- Custom login page -->
+		<form-login login-page="/iniciar_sesion.jsf?faces-redirect=true"
+			authentication-success-handler-ref="authenticationSuccessHandler" />
+
+		<!-- Custom logout page -->
+
+		<logout invalidate-session="true" delete-cookies="true"
+			logout-success-url="/iniciar_sesion.jsf?faces-redirect=true" />
+
+		<access-denied-handler error-page="/acceso_denegado.jsf?faces-redirect=true" />
+
+<!-- 		<session-management invalid-session-url="/sesion_expirada.jsf" /> -->
+
+	</http>
+
+	<beans:bean id="authenticationSuccessHandler"
+		class="pe.qc.com.validator.seguridad.ManejadorAutenticacionExitosa" />
+
+
+	<authentication-manager>
+		<authentication-provider ref="customAuthenticationProvider" />
+	</authentication-manager>
+
+	<beans:bean id="customAuthenticationProvider"
+		class="pe.qc.com.validator.seguridad.ProveedorAutenticacion" />
+
+</beans:beans>
